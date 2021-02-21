@@ -1,3 +1,9 @@
+'''
+Created on Sat Nov 14 0:35:04 2020
+
+@author: Kenneth Lara
+'''
+
 import discord, datetime, time, re, asyncio, random
 from discord.ext import commands
 from discord.utils import get 
