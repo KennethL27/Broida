@@ -1,0 +1,22 @@
+Ideas
+    provide a scoreboard in the gaming channel
+        top 5-7 players
+        embed message or regular message 
+        dont reveal question until reaction are placed
+        maybe make a command to get the current scoreboard in case someone wants to check it in another channel
+    trivia game
+        an embed message
+        with reactions as a,b,c,d
+        score will be less the longer you wait to answer (like kahoot)
+        first reaction is the players choice
+    create minigames for other users 
+        create their own personal channel 
+        something like sudoku to play individual games 
+        compete to be the fastest to solve the puzzle 
+        top 5 will have different points
+    pictonary 
+        people can be in voice channel trying to collectivly guess
+        Have a presubmitted collection of images to post 
+        have the channel wait for the correct guess to be sent 
+        hint option
+        first person who guesses it gets the point
