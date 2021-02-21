@@ -1159,7 +1159,7 @@ async def helpA(ctx):
         the format fot this command is as follows: **.exam <channel name> <role> from <first date(mm-dd-yyyy)> <start time(hh:mm)am/pm> to <second date (mm-dd-yyyy)> <end time(hh:mm)am/pm>**', inline = False)
     await ctx.send(embed = embed)
 
-# Moderation Command: Raffel
+# Moderation Command: Raffle
 # On Release had some bugs
 ######################################
 @client.command()
