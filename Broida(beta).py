@@ -64,6 +64,11 @@ list_of_commands = ['.courses', '.classes', '.class', '.schedule', '.merch', '.m
 ######################################
 open_exam = []
 
+# List of Users to handle for anonymity
+######################################
+user_list = []
+generated_user = []
+
 @client.event
 async def on_ready():
     bot_description = discord.Game('missing the crowds | .help')
@@ -1278,5 +1283,25 @@ async def non_gaucho(ctx):
         await i.send(message)
 
     print(non_gaucho_members)
+
+# Anonomity across all channels, use the anonymous code as a command. Will lack the complete anonymity but alllows for a simple anonymous post across the server
+######################################
+@client.command(aliases=['whine','r','complaint'])
+async def rant(ctx,*,rant):
+    k = 0
+    if ctx.author not in user_list:
+        user = random.randint(0,9999)
+        user_list.append(ctx.author)
+        generated_user.append(f'User{user}')
+        print(f'User: {ctx.author} said: {rant}')
+        await ctx.message.delete()
+        await ctx.send(f'User{user}: {rant}')
+    elif ctx.author in user_list:
+        for i in user_list:
+            if i == ctx.author:
+                print(f'User: {ctx.author} said: {rant}')
+                await ctx.message.delete()
+                await ctx.send(f'{generated_user[k]}: {rant}')
+            k = k + 1
 
 client.run('TOKEN')
