@@ -1286,8 +1286,8 @@ async def non_gaucho(ctx):
 
 # Anonomity across all channels, use the anonymous code as a command. Will lack the complete anonymity but alllows for a simple anonymous post across the server
 ######################################
-@client.command(aliases=['whine','r','complaint'])
-async def rant(ctx,*,rant):
+@client.command(aliases=['anonomity','a'])
+async def anonymous(ctx,*,rant):
     k = 0
     if ctx.author not in user_list:
         user = random.randint(0,9999)
