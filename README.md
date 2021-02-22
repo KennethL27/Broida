@@ -2,7 +2,7 @@
 Alpha: *Version 1.2.0*
 Beta: *Version 2.2.0*
 
-![Broida Discord Profile](https://github.com/KennethL/Broida/Images/Broida_Profile.jpg "Broida Discord Profile") 
+![Broida Discord Profile](https://raw.githubusercontent.com/KennethL27/Broida/master/Images/Broida_Profile.jpg "Broida Discord Profile") 
 
 ___
 ## Overview
