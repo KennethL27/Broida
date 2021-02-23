@@ -12,7 +12,7 @@ ___
 <table>
 <tr>
 <td>
-  Broida is made for the Univeristy of California, Santa Barabara Physics Discord. The main purpose behind this project is to provide useful information to both moderators and users. Broida is made by using <a href="https://discordpy.readthedocs.io/en/latest/">Discord's Python API</a>. As the UCSB Physics Discord Community continues to grow, Broida will become more intricate and provide more usufull tools. This project includes a Beta and Alpha Version, where the Alpha Verison is currently running on a Rasberry Pi 4.  <a href=""></a>
+  Broida is made for the Univeristy of California, Santa Barabara Physics Discord. The main purpose behind this project is to provide useful information to both moderators and users. Broida is made by using <a href="https://discordpy.readthedocs.io/en/latest/">Discord's Python API</a>. As the UCSB Physics Discord Community continues to grow, Broida will become more intricate and provide more usufull tools. This project includes a Beta and Alpha Version, where the Alpha Verison is currently running on a Rasberry Pi 4. 
 </td>
 </tr>
 </table>
