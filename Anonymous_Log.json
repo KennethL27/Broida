@@ -1,0 +1,10 @@
+{
+    "anonymous_message": [
+        {
+            "id": 1234567890,
+            "author": "<@!0123456789>",
+            "channel": "<#0123456789",
+            "message": "This is an example of how the json file will look like, when a new anonymous post is created a new entry will follow this format."
+        }
+    ]
+}
