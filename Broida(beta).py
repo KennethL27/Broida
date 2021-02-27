@@ -5,7 +5,7 @@ Created on Fri Nov 13 3:47:20 2020
 
 '''
 
-import discord, datetime, time, re, asyncio, random
+import discord, datetime, time, re, asyncio, random, json
 from discord.ext import commands
 from discord.utils import get
 from dateutil import tz
@@ -68,6 +68,12 @@ open_exam = []
 ######################################
 user_list = []
 generated_user = []
+
+# Function for writing in json file
+######################################
+def write_json(data):
+    with open ('Anonymous_Log.json', 'w') as file:
+        json.dump(data, file, indent = 4)
 
 @client.event
 async def on_ready():
@@ -742,6 +748,9 @@ async def on_message_delete(message):
     utc = utc.replace(tzinfo = from_zone)
     convert_zone = utc.astimezone(to_zone)
 
+    if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous'):
+        return
+
     if message.channel != message_log_channel:
         if message.channel == anonymous_channel or message.channel == rant_channel:
             if message.content.startswith('-r'):
@@ -1286,22 +1295,70 @@ async def non_gaucho(ctx):
 
 # Anonomity across all channels, use the anonymous code as a command. Will lack the complete anonymity but alllows for a simple anonymous post across the server
 ######################################
-@client.command(aliases=['anonomity','a'])
-async def anonymous(ctx,*,rant):
+@client.command(aliases=['anonymity','a'])
+async def anonymous(ctx,*,user_message):
     k = 0
-    if ctx.author not in user_list:
+    user_name = ctx.author
+    channel = ctx.channel
+    if user_name not in user_list:
         user = random.randint(0,9999)
-        user_list.append(ctx.author)
+        user_list.append(user_name)
         generated_user.append(f'User{user}')
-        print(f'User: {ctx.author} said: {rant}')
+
         await ctx.message.delete()
-        await ctx.send(f'User{user}: {rant}')
-    elif ctx.author in user_list:
+        anonymous_message = await ctx.send(f'User{user}: {user_message}')
+        anonymous_message_id = anonymous_message.id
+        
+        with open ("Anonymous_Log.json") as anonymous_log_json:
+            data = json.load(anonymous_log_json)
+            message_log = data['anonymous_message']
+            new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
+            message_log.append(new_entry)
+        write_json(data)
+
+    elif user_name in user_list:
         for i in user_list:
-            if i == ctx.author:
-                print(f'User: {ctx.author} said: {rant}')
+            if i == user_name:
+
                 await ctx.message.delete()
-                await ctx.send(f'{generated_user[k]}: {rant}')
+                anonymous_message = await ctx.send(f'{generated_user[k]}: {user_message}')
+                anonymous_message_id = anonymous_message.id
+
+                with open ("Anonymous_Log.json") as anonymous_log_json:
+                    data = json.load(anonymous_log_json)
+                    message_log = data['anonymous_message']
+                    new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
+                    message_log.append(new_entry)
+                write_json(data)
+
             k = k + 1
+
+# Allows the staff to view the anonymous message, only use when neccessary, planning on adding a feature to only allow the message to show if 3 or more staff approve
+######################################
+@client.command(aliases=['afind'])
+@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
+async def anonymous_finder(ctx,message_id):
+    status = False
+    try:
+        message_id = int(message_id)
+    except:
+        await ctx.send('Please use the id of the message.')
+    if ctx.channel.id != bot_command_channel_id:
+        await ctx.message.delete()
+        message = await ctx.send("Please do not use this command here!")
+        await message.delete(delay = 5)
+    else:
+        with open ('Anonymous_Log.json') as anonymous_log_json:
+            data = json.load(anonymous_log_json)
+            for json_message in data['anonymous_message']:
+                if json_message['id'] == message_id:
+                    author = json_message['author']
+                    channel = json_message['channel']
+                    message = json_message['message']
+                    content = f'User: {author} \nChannel: {channel}\nMessage: {message}'
+                    await ctx.send(content)
+                    status = True
+            if status == False:
+                await ctx.send('There is no data on the message you selected.')
 
 client.run('TOKEN')
