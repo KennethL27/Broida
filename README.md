@@ -1,6 +1,6 @@
 # Broida
 Alpha: *Version 1.2.0*
-Beta: *Version 2.2.1*
+Beta: *Version 2.2.2*
 
 ![Broida Discord Profile](https://raw.githubusercontent.com/KennethL27/Broida/master/Images/Broida_Profile.jpg "Broida Discord Profile") 
 
@@ -31,9 +31,11 @@ ___
 * All Alpha features are inluded in the Beta Version.
 * Provides Users the ability to create Study Group Channels.
 * Provides Moderators with a Warn System, Mute System, and Reminder System for Non-Gauchos.
-* With the latest Beta Version (2.2.1) two commands have been created:
+* With Beta Version (2.2.1) two commands have been created:
 1. anonymous (aka. a or anonymity): allows users within the server to post messages anonymously. For example, a user might message `.a message`, then Broida will remove the user's message and upload the message to a json file and send to the same channel `User1234: message`. Broida keeps track of each unique user and stores it under the same user number, built for continuity. 
 2. anonymous_finder (aka afind): This command is only for staff members. This searches through the json file to find the corresponding id and returns the author, channel, and message that the anonymous user sent. This command only works in the dedicated staff bot-command-channel. There are some plans to add an extra step to actually recieve the info, more than 3 staff members must agree to view the anonymous user in order to view the info.
+* With Beta Version (2.2.2) user command messages will no longer be deleted, this helps spread the acknowledgement of these commands and will help aim more use of Broida. 
+
 ___
 
 ## Installation 
