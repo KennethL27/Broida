@@ -47,10 +47,15 @@ message_log_id = 779721248661176380
 ticket_channel_id = 781468089438568448
 announcement_channel_id = 782227895925866516
 bot_command_channel_id = 804860036207738890
+advising_channel_id = 805177278958272572
 rant_id = 771845526903586847
 anonymous_id = 787685941794832405
 ban_id = 794092839280967691 
 welcome_id = 775492454338002994 
+
+# Boolean to trigger message delete function
+######################################
+update_status = False
 
 # Bot Ids
 ######################################
@@ -58,7 +63,7 @@ bot_list_id = [204255221017214977]
 
 # List of Commands that the bot can disregard when the command message is deleted.
 ######################################
-list_of_commands = ['.physics', '.fiziks', '.uptime', '.dadjoke']
+list_of_commands = ['.physics', '.fiziks', '.uptime', '.dadjoke', '.update']
 
 # List of exams that are set to be at a certain date, need to move to an offline database. 
 ######################################
@@ -1354,5 +1359,22 @@ async def anonymous_finder(ctx,message_id):
                     status = True
             if status == False:
                 await ctx.send('There is no data on the message you selected.')
+
+# Allows staff to trigger an update, for one day the bot will track messages so that when the update hits, deleted messages can be track from its previous sessions.
+######################################
+@client.command()
+@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
+async def update(ctx):
+    await ctx.message.delete()
+    global update_status
+    if ctx.channel.id != bot_command_channel_id:
+        message = await ctx.send("Please do not use this command here!")
+        await message.delete(delay = 5)
+    else: 
+        update_status = True
+        await ctx.send('Scheduling update for 1 day in advance.')
+        await asyncio.sleep(30) #for 24 hrs = 86400
+        update_status = False
+        await ctx.send('Update will soon begin!')
 
 client.run('TOKEN')
