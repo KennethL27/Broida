@@ -58,7 +58,7 @@ bot_list_id = [204255221017214977]
 
 # List of Commands that the bot can disregard when the command message is deleted.
 ######################################
-list_of_commands = ['.courses', '.classes', '.class', '.schedule', '.merch', '.mer', '.physics', '.fiziks', '.discords', '.discs', '.open_exams', '.advising', '.dates', '.uptime', '.dadjoke']
+list_of_commands = ['.physics', '.fiziks', '.uptime', '.dadjoke']
 
 # List of exams that are set to be at a certain date, need to move to an offline database. 
 ######################################
@@ -91,7 +91,6 @@ async def on_ready():
 ######################################
 @client.command(aliases = ['classes', 'class', 'schedule'])
 async def courses(ctx):
-    await ctx.message.delete()
     embed = discord.Embed(title = 'Proposed Courses for 20-21', url = 'https://www.physics.ucsb.edu/resources/teachingassignments', colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.set_thumbnail(url = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif')
     embed.set_image(url = 'https://cdn.discordapp.com/attachments/772690834151571506/782475543404347422/Screenshot_20201128-231814_Drive.jpg')
@@ -101,7 +100,6 @@ async def courses(ctx):
 ######################################
 @client.command(aliases = ['mer'])
 async def merch(ctx):
-    await ctx.message.delete()
     link = 'https://teespring.com/stores/my-store-10181903'
     image = 'https://cdn.discordapp.com/attachments/700224899721199626/782215254540550164/WIP.png'
     embed = discord.Embed(title = 'Merch', url = link, colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -204,7 +202,6 @@ async def physics(ctx):
 ######################################
 @client.command(aliases = ['discs'])
 async def discords(ctx): 
-    await ctx.message.delete()
     embed = discord.Embed(title = 'Links to other discords', description = 'The following discord links have been verifed, if you wish to inlude one that is not already here please DM an admin or mod.',
         colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.add_field(name ='UCSB', value = 'pending')
@@ -483,7 +480,6 @@ async def ticket_error(ctx, error):
 ######################################
 @client.command()
 async def open_exams(ctx):
-    await ctx.message.delete()
     embed = discord.Embed(colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc)) 
     if len(open_exam) == 0:
         embed.add_field(name = 'Open Exam', value = 'There is no exams planned at this time.')
@@ -652,7 +648,6 @@ async def dadjoke(ctx):
 ######################################
 @client.command()
 async def advising(ctx):
-    await ctx.message.delete()
     url = 'https://www.physics.ucsb.edu/education/undergrad/advising-help'
     embed = discord.Embed(title = 'UCSB Physics Advising', url = url, colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.add_field(name = '__Schedule Meeting with Jean Dill__', value = 'https://shoreline.ucsb.edu/meetings/1336841/JDOfficeHours', inline = False)
@@ -664,7 +659,6 @@ async def advising(ctx):
 ######################################
 @client.command()
 async def dates(ctx):
-    await ctx.message.delete()
     url = 'https://registrar.sa.ucsb.edu/calendars/calendars-deadlines/registration-pass-dates/2020-2021-registration-pass-times'
     embed = discord.Embed(title = 'UCSB 2020-2021 Registration Pass Times/Important Deadlines', url = url, colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.set_image(url = 'https://cdn.discordapp.com/attachments/700224899721199626/794508278809100309/UCSBLogo.png')
