@@ -74,10 +74,10 @@ open_exam = []
 user_list = []
 generated_user = []
 
-# Function for writing in json file
+# Function for writing in json file given the file name
 ######################################
-def write_json(data):
-    with open ('Anonymous_Log.json', 'w') as file:
+def write_json(data, file_name):
+    with open (file_name, 'w') as file:
         json.dump(data, file, indent = 4)
 
 @client.event
@@ -722,6 +722,7 @@ async def announcement(ctx, date, time, *, announcement): #need to be able to ed
 ######################################
 @client.listen('on_message')
 async def on_message(message):
+    '''
     list_of_word_triggers = ['shoot you', 'kill myself', 'retard', 'kill you', 'youre dumb', "youre so dumb", "you're dumb", "you're so dumb"]
     message_to_send = 'This message is being flag and will be under reviewed by the admins and mods, for more information please contact either an admin or mod.'
     channel = client.get_channel(ticket_channel_id)
@@ -732,35 +733,90 @@ async def on_message(message):
             embed = discord.Embed(title = '**WORD TRIGGER: PLEASE REVIEW THE SITUATION**', description = f'The triggered message was in {message.channel.mention} by {message.author.mention}')
             embed.add_field(name = 'Message content', value = message.content)
             await channel.send(embed = embed)
-
-#AutoModeration, returns the delete message to a specific channel for Moderators
-######################################
-@client.event
-async def on_message_delete(message):
-    message_log_channel = client.get_channel(message_log_id)
-    anonymous_channel = client.get_channel(anonymous_id)
-    rant_channel = client.get_channel(rant_id)
-    
+    '''
+    global update_status
     from_zone = tz.tzutc()
     to_zone = tz.tzlocal()
     utc = datetime.datetime.strptime(str(message.created_at)[:-7], "%Y-%m-%d %H:%M:%S")
     utc = utc.replace(tzinfo = from_zone)
-    convert_zone = utc.astimezone(to_zone)
-
-    if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous'):
+    convert_zone = str(utc.astimezone(to_zone))
+    if update_status is False:
         return
+    else:
+        #append to delete_message_log
+        message_id = message.id
+        user_name = message.author
+        channel = message.channel
+        user_message = message.content
+        with open ("Update_Message_Log.json") as Update_Message_Log_json:
+            data = json.load(Update_Message_Log_json)
+            message_log = data['messages']
+            new_entry = {"id": message_id, "author": user_name.mention, "channel": channel.mention, "created_at": convert_zone, "message": user_message}
+            message_log.append(new_entry)
+        write_json(data, "Update_Message_Log.json")
 
-    if message.channel != message_log_channel:
-        if message.channel == anonymous_channel or message.channel == rant_channel:
-            if message.content.startswith('-r'):
-                return
-        if message.author != client.user:
-            if message.content not in list_of_commands:
-                # attachment = await message.attachments[0].to_file(use_cached=True)
-                embed = discord.Embed(title = f'A message was delete in #{message.channel} from {message.author}', description = message.content, colour = 0XFFFF00)#,timestamp = datetime.datetime.now(datetime.timezone.utc))
-                embed.set_footer(text = f'Created at {convert_zone} | Deleted at {datetime.datetime.now()}')
-                # embed.set_image(url = f'attachment://{attachment.filename}')
-                await message_log_channel.send(embed = embed)
+# AutoModeration, returns the delete message to a specific channel for Moderators
+# Version 2 of deleted_message_log: allows for easy transfer of code update. 
+######################################
+@client.event
+async def on_raw_message_delete(payload):
+    guild = client.get_guild(guild_id)
+    message_log_channel = client.get_channel(message_log_id)
+    anonymous_channel = client.get_channel(anonymous_id)
+    rant_channel = client.get_channel(rant_id)
+    advising_channel = client.get_channel(advising_channel_id)
+    message = payload.cached_message
+    status = False
+
+    try:
+        if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous'):
+            return
+
+        from_zone = tz.tzutc()
+        to_zone = tz.tzlocal()
+        utc = datetime.datetime.strptime(str(message.created_at)[:-7], "%Y-%m-%d %H:%M:%S")
+        utc = utc.replace(tzinfo = from_zone)
+        convert_zone = utc.astimezone(to_zone)
+
+        if message.channel != message_log_channel:
+            if message.channel == anonymous_channel or message.channel == rant_channel or message.channel == advising_channel:
+                if message.content.startswith('-r'):
+                    return
+            if message.author != client.user:
+                if message.content not in list_of_commands:
+                    # attachment = await message.attachments[0].to_file(use_cached=True)
+                    embed = discord.Embed(title = f'A message was delete in #{message.channel} from {message.author}', description = message.content, colour = 0XFFFF00)#,timestamp = datetime.datetime.now(datetime.timezone.utc))
+                    embed.set_footer(text = f'Created at {convert_zone} | Deleted at {datetime.datetime.now()}')
+                    # embed.set_image(url = f'attachment://{attachment.filename}')
+                    await message_log_channel.send(embed = embed)
+
+    except:
+        message_id = payload.message_id
+        with open ('Update_Message_Log.json') as Update_Message_Log_json:
+            data = json.load(Update_Message_Log_json)
+            for json_message in data['messages']:
+                if json_message['id'] == message_id:
+                    author = json_message['author']
+                    channel = json_message['channel']
+                    message = json_message['message']
+                    created_at = json_message['created_at']
+                    message_channel = client.get_channel(channel[2:-1])
+                    message_author = guild.get_member(author[3:-1])
+                    if message.startswith('.a') or message.startswith('.anonymity') or message.startswith('.anonymous'):
+                        return
+                    if message_channel != message_log_channel:
+                        if message_channel == anonymous_channel or message_channel == rant_channel or message_channel == advising_channel:
+                            if message.startswith('-r'):
+                                return
+                        if message_author != client.user:
+                            if message not in list_of_commands:
+                                embed = discord.Embed(title = f'A message was delete while update was in progress', description = f'Channel: {channel} From {author}\n{message}', 
+                                colour = 0XFFFF00)#,timestamp = datetime.datetime.now(datetime.timezone.utc))
+                                embed.set_footer(text = f'Created at {created_at} | Deleted at {datetime.datetime.now()}')
+                                await message_log_channel.send(embed = embed)
+                                status = True
+            if status == False:
+                await message_log_channel.send('A deleted message was out of scope. Sorry about that ')
 
 # Exam Command 2.0a, Moderators able to close a course channel from time1 to time2.
 ######################################
@@ -1313,7 +1369,7 @@ async def anonymous(ctx,*,user_message):
             message_log = data['anonymous_message']
             new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
             message_log.append(new_entry)
-        write_json(data)
+        write_json(data, "Anonymous_Log.json")
 
     elif user_name in user_list:
         for i in user_list:
@@ -1328,7 +1384,7 @@ async def anonymous(ctx,*,user_message):
                     message_log = data['anonymous_message']
                     new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
                     message_log.append(new_entry)
-                write_json(data)
+                write_json(data, "Anonymous_Log.json")
 
             k = k + 1
 
