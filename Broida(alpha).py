@@ -4,7 +4,7 @@ Created on Sat Nov 14 0:35:04 2020
 @author: Kenneth Lara
 '''
 
-import discord, datetime, time, re, asyncio, random
+import discord, datetime, time, re, asyncio, random, json
 from discord.ext import commands
 from discord.utils import get 
 from dateutil import tz
@@ -42,10 +42,19 @@ spam_channel_id = 775176870064685126
 rant_channel_id = 718972914434572402
 ban_channel_id = 794898870030434325
 welcome_channel_id = 761361922322071593
+advising_channel_id = 738201497053167717
 
 open_exam = []
+user_list = []
+generated_user = []
 
-list_of_commands = ['.courses', '.classes', '.class', '.schedule', '.merch', '.mer', '.physics', '.fiziks', '.discords', '.discs', '.open_exams', '.advising', '.dates', '.uptime', '.dadjoke']
+update_status = False
+
+list_of_commands = ['.physics', '.fiziks', '.uptime', '.dadjoke', '.update']
+
+def write_json(data, file_name):
+    with open (file_name, 'w') as file:
+        json.dump(data, file, indent = 4)
 
 @client.event
 async def on_ready():
@@ -60,7 +69,6 @@ async def on_ready():
 
 @client.command(aliases = ['classes', 'class', 'schedule'])
 async def courses(ctx):
-    await ctx.message.delete()
     embed = discord.Embed(title = 'Proposed Courses for 20-21', url = 'https://www.physics.ucsb.edu/resources/teachingassignments', colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.set_thumbnail(url = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif')
     embed.set_image(url = 'https://cdn.discordapp.com/attachments/772690834151571506/782475543404347422/Screenshot_20201128-231814_Drive.jpg')
@@ -68,7 +76,6 @@ async def courses(ctx):
 
 @client.command(aliases = ['mer'])
 async def merch(ctx):
-    await ctx.message.delete()
     link = 'https://teespring.com/stores/my-store-10181903'
     image = 'https://cdn.discordapp.com/attachments/700224899721199626/782215254540550164/WIP.png'
     embed = discord.Embed(title = 'Merch', url = link, colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -168,7 +175,6 @@ async def physics(ctx):
 
 @client.command(aliases = ['discs'])
 async def discords(ctx):
-    await ctx.message.delete()
     embed = discord.Embed(title = 'Links to other discords', description = 'The following discord links have been verifed, if you wish to inlude one that is not already here please DM an admin or mod.',
                           colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.add_field(name = 'UCSB', value = 'https://discord.com/invite/bqEZCWm')
@@ -178,6 +184,44 @@ async def discords(ctx):
     embed.add_field(name = 'PokemonGo', value = 'https://discord.gg/HmmrXSgXMT')
     embed.add_field(name = 'RPG at UCSB', value = 'https://discord.gg/ebc8UBG')
     await ctx.send(embed = embed)
+
+@client.command(aliases=['anonymity','a'])
+async def anonymous(ctx,*,user_message):
+    k = 0
+    user_name = ctx.author
+    channel = ctx.channel
+    if user_name not in user_list:
+        user = random.randint(0,9999)
+        user_list.append(user_name)
+        generated_user.append(f'User{user}')
+
+        await ctx.message.delete()
+        anonymous_message = await ctx.send(f'User{user}: {user_message}')
+        anonymous_message_id = anonymous_message.id
+        
+        with open ("Anonymous_Log.json") as anonymous_log_json:
+            data = json.load(anonymous_log_json)
+            message_log = data['anonymous_message']
+            new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
+            message_log.append(new_entry)
+        write_json(data, "Anonymous_Log.json")
+
+    elif user_name in user_list:
+        for i in user_list:
+            if i == user_name:
+
+                await ctx.message.delete()
+                anonymous_message = await ctx.send(f'{generated_user[k]}: {user_message}')
+                anonymous_message_id = anonymous_message.id
+
+                with open ("Anonymous_Log.json") as anonymous_log_json:
+                    data = json.load(anonymous_log_json)
+                    message_log = data['anonymous_message']
+                    new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
+                    message_log.append(new_entry)
+                write_json(data, "Anonymous_Log.json")
+
+            k = k + 1
 
 @client.command(aliases = ['tic'])
 async def ticket(ctx, member : discord.Member, * , reason):
@@ -439,7 +483,6 @@ async def ticket_error(ctx, error):
 
 @client.command()
 async def open_exams(ctx):
-    await ctx.message.delete()
     embed = discord.Embed(colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     if len(open_exam) == 0:
         embed.add_field(name = 'Open Exams', value = 'There is no exams planned at this time')
@@ -451,7 +494,6 @@ async def open_exams(ctx):
 
 @client.command()
 async def advising(ctx):
-    await ctx.message.delete()
     url = 'https://www.physics.ucsb.edu/education/undergrad/advising-help'
     embed = discord.Embed(title = 'UCSB Physics Advising', url = url, colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.add_field(name = '__Schedule Meeting with Jean Dill__', value = 'https://shoreline.ucsb.edu/meetings/1336841/JDOfficeHours', inline = False)
@@ -460,8 +502,7 @@ async def advising(ctx):
     await ctx.send(embed = embed) 
 
 @client.command()
-async def dates(ctx):
-    await ctx.message.delete()    
+async def dates(ctx):  
     url = 'https://registrar.sa.ucsb.edu/calendars/calendars-deadlines/registration-pass-dates/2020-2021-registration-pass-times'
     embed = discord.Embed(title = 'UCSB 2020-2021 Registration Pass Times/Important Deadlines', url = url, colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.set_image(url = 'https://cdn.discordapp.com/attachments/700224899721199626/794508278809100309/UCSBLogo.png')
@@ -489,7 +530,8 @@ async def help(ctx):
     embed = discord.Embed(title = 'Commands for Broida', description = 'When using these commands, begin your statement with "." followed by the name of the command',\
          colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.set_thumbnail(url = image)
-    embed.add_field(name = 'merch (mer)', value = 'Get the link to the merch website.')
+    embed.add_field(name = 'anonymous (anonymity, a)', value = 'Post anonymously in any channel using this command. This follows the same idea as the other anonymous bots. However it does not have the DM feature.')
+    embed.add_field(name = 'merch (mer)', value = 'Get the link to the merch website.', inline = False)
     embed.add_field(name = 'courses (classes, class, schedule)', value = 'Get the link and image to the 2020-21 Teaching Assignments', inline = False)
     embed.add_field(name = 'advising', value = 'Get the link to UCSB Physics Advising as well as direct links to make appointments with Jean Dill or Cooper.', inline = False)
     embed.add_field(name = 'dates', value = 'Get the link to the full list of dates such as drop deadline or past times.', inline = False)
@@ -658,29 +700,88 @@ async def announcement(ctx, date, time, *, announcement): #need to be able to ed
 
         await channel.send(content = announcement)
     
-@client.event
-async def on_message_delete(message): #need to be able to see picture too
-    message_log_channel = client.get_channel(message_log_channel_id)
-    spam_channel = client.get_channel(spam_channel_id)
-    rant_channel = client.get_channel(rant_channel_id)
-    
+@client.listen('on_message')
+async def on_message(message):
+    global update_status
     from_zone = tz.tzutc()
     to_zone = tz.tzlocal()
     utc = datetime.datetime.strptime(str(message.created_at)[:-7], "%Y-%m-%d %H:%M:%S")
     utc = utc.replace(tzinfo = from_zone)
-    convert_zone = utc.astimezone(to_zone)    
-    
-    if message.channel != message_log_channel:
-        if message.channel == spam_channel or message.channel == rant_channel:
-            if message.content.startswith('-r'):
-                return
-        if message.author != client.user:
-            if message.content not in list_of_commands:
-                # attachment = await message.attachments[0].to_file(use_cached=True)
-                embed = discord.Embed(title = f'A message was deleted in #{message.channel} from {message.author}', description = message.content, colour = 0XFFFF00)#,timestamp = datetime.datetime.now(datetime.timezone.utc))
-                embed.set_footer(text = f"Created at {convert_zone} | Deleted at {datetime.datetime.now()}")
-                # embed.set_image(url = f'attachment://{attachment.filename}')
-                await message_log_channel.send(embed = embed) 
+    convert_zone = str(utc.astimezone(to_zone))
+    if update_status is False:
+        return
+    else:
+        #append to delete_message_log
+        message_id = message.id
+        user_name = message.author
+        channel = message.channel
+        user_message = message.content
+        with open ("Update_Message_Log.json") as Update_Message_Log_json:
+            data = json.load(Update_Message_Log_json)
+            message_log = data['messages']
+            new_entry = {"id": message_id, "author": user_name.mention, "channel": channel.mention, "created_at": convert_zone, "message": user_message}
+            message_log.append(new_entry)
+        write_json(data, "Update_Message_Log.json")
+
+@client.event
+async def on_raw_message_delete(payload):
+    guild = client.get_guild(guild_id)
+    message_log_channel = client.get_channel(message_log_channel_id)
+    anonymous_channel = client.get_channel(rant_channel_id)
+    rant_channel = client.get_channel(rant_channel_id)
+    advising_channel = client.get_channel(advising_channel_id)
+    message = payload.cached_message
+    status = False
+
+    try:
+        if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous'):
+            return
+
+        from_zone = tz.tzutc()
+        to_zone = tz.tzlocal()
+        utc = datetime.datetime.strptime(str(message.created_at)[:-7], "%Y-%m-%d %H:%M:%S")
+        utc = utc.replace(tzinfo = from_zone)
+        convert_zone = utc.astimezone(to_zone)
+
+        if message.channel != message_log_channel:
+            if message.channel == anonymous_channel or message.channel == rant_channel or message.channel == advising_channel:
+                if message.content.startswith('-r'):
+                    return
+            if message.author != client.user:
+                if message.content not in list_of_commands:
+                    # attachment = await message.attachments[0].to_file(use_cached=True)
+                    embed = discord.Embed(title = f'A message was delete in #{message.channel} from {message.author}', description = message.content, colour = 0XFFFF00)#,timestamp = datetime.datetime.now(datetime.timezone.utc))
+                    embed.set_footer(text = f'Created at {convert_zone} | Deleted at {datetime.datetime.now()}')
+                    # embed.set_image(url = f'attachment://{attachment.filename}')
+                    await message_log_channel.send(embed = embed)
+
+    except:
+        message_id = payload.message_id
+        with open ('Update_Message_Log.json') as Update_Message_Log_json:
+            data = json.load(Update_Message_Log_json)
+            for json_message in data['messages']:
+                if json_message['id'] == message_id:
+                    author = json_message['author']
+                    channel = json_message['channel']
+                    message = json_message['message']
+                    created_at = json_message['created_at']
+                    message_channel = client.get_channel(channel[2:-1])
+                    message_author = guild.get_member(author[3:-1])
+                    if message.startswith('.a') or message.startswith('.anonymity') or message.startswith('.anonymous'):
+                        return
+                    if message_channel != message_log_channel:
+                        if message_channel == anonymous_channel or message_channel == rant_channel or message_channel == advising_channel:
+                            if message.startswith('-r'):
+                                return
+                        if message_author != client.user:
+                            if message not in list_of_commands:
+                                embed = discord.Embed(title = f'A message was delete while update was in progress', description = f'Channel: {channel} From {author}\n{message}', 
+                                colour = 0XFFFF00)#,timestamp = datetime.datetime.now(datetime.timezone.utc))
+                                embed.set_footer(text = f'Created at {created_at} | Deleted at {datetime.datetime.now()}')
+                                await message_log_channel.send(embed = embed)
+                                status = True
+            if status == False:
+                await message_log_channel.send('A deleted message was out of scope. Sorry about that ')
 
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
@@ -871,6 +972,32 @@ async def winner(ctx, channel : discord.TextChannel):
     await ctx.send(embed = embed)
     print(unique_members)
 
+@client.command(aliases=['afind'])
+@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
+async def anonymous_finder(ctx,message_id):
+    status = False
+    try:
+        message_id = int(message_id)
+    except:
+        await ctx.send('Please use the id of the message.')
+    if ctx.channel.id != bot_command_channel_id:
+        await ctx.message.delete()
+        message = await ctx.send("Please do not use this command here!")
+        await message.delete(delay = 5)
+    else:
+        with open ('Anonymous_Log.json') as anonymous_log_json:
+            data = json.load(anonymous_log_json)
+            for json_message in data['anonymous_message']:
+                if json_message['id'] == message_id:
+                    author = json_message['author']
+                    channel = json_message['channel']
+                    message = json_message['message']
+                    content = f'User: {author} \nChannel: {channel}\nMessage: {message}'
+                    await ctx.send(content)
+                    status = True
+            if status == False:
+                await ctx.send('There is no data on the message you selected.')
+
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
 async def ban(ctx, member : discord.Member , *, length):
@@ -926,6 +1053,21 @@ async def ban(ctx, member : discord.Member , *, length):
     
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
+async def update(ctx):
+    await ctx.message.delete()
+    global update_status
+    if ctx.channel.id != bot_command_channel_id:
+        message = await ctx.send("Please do not use this command here!")
+        await message.delete(delay = 5)
+    else: 
+        update_status = True
+        await ctx.send('Scheduling update for 1 day in advance.')
+        await asyncio.sleep(30) #for 24 hrs = 86400
+        update_status = False
+        await ctx.send('Update will soon begin!')
+
+@client.command()
+@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
 async def helpA(ctx):
     image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
     embed = discord.Embed(title = 'Commands for this bot', description = 'When using these commands, begin your statement with "." followed by the name of the command',\
@@ -937,6 +1079,9 @@ async def helpA(ctx):
                     inline = False)
     embed.add_field(name = 'winner', value = 'This command is declearing a raffle winner for a specific channel.\
         The format is as follows: **.winner <#channel>**', inline = False)
+    embed.add_field(name = 'update', value = 'Schedule an update a day in advance, this begins storing messages to allow for an easy transistion between updates.', inline = False)
+    embed.add_field(name = 'anonymous_finder (afind)', value = "This command will only work in #bot-commands. The format has to follow `.afind 0123456789`. The integer is the message id, to get this\
+        you must have Developer Mode enable. This only works for Broida's anonymous posts.", inline = False)
     embed.add_field(name = 'ban', value = 'This command will ban the member you mention for a certain amount of time, the least amount of time is 1 min. **.ban <member> <time>**', inline = False)
     embed.add_field(name = 'exam', value = 'This command is only available to admins and mods to close channels for a midterm or final. This command is for closing a channel for less than one day.\
         The format is as follows: **.exam <#channel> <@role> from <date(mm-dd-yyyy)> <start time(hh:mm)am/pm> to <end time(hh:mm)am/pm>**', inline = False)
@@ -944,19 +1089,6 @@ async def helpA(ctx):
         the format fot this command is as follows: **.exam <#channel> <@role> from <first date(mm-dd-yyyy)> <start time(hh:mm)am/pm> to <second date (mm-dd-yyyy)> <end time(hh:mm)am/pm>**', inline = False)
     await ctx.send(embed = embed)
 
-'''
-@client.listen('on_message')
-async def on_message(message):
-    list_of_word_triggers = ['shoot you', 'kill myself', 'retard', 'kill you', 'youre dumb', "youre so dumb", "you're dumb", "you're so dumb"]
-    message_to_send = 'This message is being flag and will be under reviewed by the admins and mods, for more information please contact either an admin or mod.'
-    channel = client.get_channel(ticket_channel_id)
-    for i in list_of_word_triggers:
-        if i in message.content:
-            await message.delete()
-            await message.channel.send(content = message_to_send)
-            embed = discord.Embed(title = '**WORD TRIGGER: PLEASE REVIEW THE SITUATION**', description = f'The triggered message was in {message.channel.mention} by {message.author.mention}')
-            embed.add_field(name = 'Message content', value = message.content)
-            await channel.send(embed = embed)
-'''
+
 
 client.run('Token')
