@@ -1,6 +1,6 @@
 # Broida
 Alpha: *Version 1.2.0*
-Beta: *Version 2.2.3*
+Beta: *Version 2.2.4*
 
 ![Broida Discord Profile](https://raw.githubusercontent.com/KennethL27/Broida/master/Images/Broida_Profile.jpg "Broida Discord Profile") 
 
@@ -36,6 +36,7 @@ ___
 2. anonymous_finder (aka afind): This command is only for staff members. This searches through the json file to find the corresponding id and returns the author, channel, and message that the anonymous user sent. This command only works in the dedicated staff bot-command-channel. There are some plans to add an extra step to actually recieve the info, more than 3 staff members must agree to view the anonymous user in order to view the info.
 * With Beta Version (2.2.2) user command messages will no longer be deleted, this helps spread the acknowledgement of these commands and will help aim more use of Broida. 
 * With Beta Version (2.2.3) a new staff command is created: update. This feature allows for seamless update of the bot on the client side. Previously, when an update was conducted, deleted messages from the previous session the information was lost. This can cause issues when moderations situation occurs. With the update command, Broida will start collecting all messages for a day, then the update can take place and the messages will be safely be stored. With the next Beta Version, the deleted_message event will improved upon this new command. 
+* With Beta Version (2.2.4) a new system is now in place for messages to be saved from one code session to another. To fully use this new feature you must use the command detailed above (in version 2.2.3): `.update`. This allows Broida to start gathering messages being sent through the server for one day. Then once Broida is updated, any deleted messages that happened in that day Broida will be able to check the file for that message. This will send the deleted message to the deleted-message-log for staff to view in case of a situation.
 
 ___
 
