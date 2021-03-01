@@ -522,7 +522,8 @@ async def help(ctx):
     embed = discord.Embed(title = 'Commands for Broida', description = 'When using these commands, begin your statement with "." followed by the name of the command',\
          colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
     embed.set_thumbnail(url = image)
-    embed.add_field(name = 'merch (mer)', value = 'Get the link to the merch website.')
+    embed.add_field(name = 'anonymous (anonymity, a)', value = 'Post anonymously in any channel using this command. This follows the same idea as the other anonymous bots. However it does not have the DM feature.')
+    embed.add_field(name = 'merch (mer)', value = 'Get the link to the merch website.', inline = False)
     embed.add_field(name = 'courses (classes, class, schedule)', value = 'Get the link and image to the 2020-21 Teaching Assignments', inline = False)
     embed.add_field(name = 'advising', value = 'Get the link to UCSB Physics Advising as well as direct links to make appointments with Jean Dill or Cooper.', inline = False)
     embed.add_field(name = 'dates', value = 'Get the link to the full list of dates such as drop deadline or past times.', inline = False)
@@ -1216,6 +1217,9 @@ async def helpA(ctx):
         inline = False)
     embed.add_field(name = 'winner', value = 'This command is declearing a raffle winner for a specific channel.\
         The format is as follows: **.winner <#channel name>**', inline = False)
+    embed.add_field(name = 'update', value = 'Schedule an update a day in advance, this begins storing messages to allow for an easy transistion between updates.', inline = False)
+    embed.add_field(name = 'afind', value = "This command will only work in #bot-commands. The format has to follow `.afind 0123456789`. The integer is the message id, to get this\
+        you must have Developer Mode enable. This only works for Broida's anonymous posts.", inline = False)
     embed.add_field(name = 'ban', value = 'This command will ban the member you mention for a certain amount of time, the least amount of time is 1 min. **.ban <member> <time>**', inline = False)
     embed.add_field(name = 'exam', value = 'This command is only available to admins and mods to close channels for a midterm or final. This command is for closing a channel for less than one day.\
         The format is as follows: **.exam <channel name> <role> from <date(mm-dd-yyyy)> <start time(hh:mm)am/pm> to <end time(hh:mm)am/pm>**', inline = False)
