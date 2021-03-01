@@ -1218,7 +1218,7 @@ async def helpA(ctx):
     embed.add_field(name = 'winner', value = 'This command is declearing a raffle winner for a specific channel.\
         The format is as follows: **.winner <#channel name>**', inline = False)
     embed.add_field(name = 'update', value = 'Schedule an update a day in advance, this begins storing messages to allow for an easy transistion between updates.', inline = False)
-    embed.add_field(name = 'afind', value = "This command will only work in #bot-commands. The format has to follow `.afind 0123456789`. The integer is the message id, to get this\
+    embed.add_field(name = 'anonymous_finder (afind)', value = "This command will only work in #bot-commands. The format has to follow `.afind 0123456789`. The integer is the message id, to get this\
         you must have Developer Mode enable. This only works for Broida's anonymous posts.", inline = False)
     embed.add_field(name = 'ban', value = 'This command will ban the member you mention for a certain amount of time, the least amount of time is 1 min. **.ban <member> <time>**', inline = False)
     embed.add_field(name = 'exam', value = 'This command is only available to admins and mods to close channels for a midterm or final. This command is for closing a channel for less than one day.\
