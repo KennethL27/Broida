@@ -1,5 +1,5 @@
 # Broida
-Alpha: *Version 1.2.1*
+Alpha: *Version 1.2.2*
 Beta: *Version 2.2.5*
 
 ![Broida Discord Profile](https://raw.githubusercontent.com/KennethL27/Broida/master/Images/Broida_Profile.jpg "Broida Discord Profile") 
@@ -26,6 +26,7 @@ ___
 * Ticket System, delete message log, and channel raffle.
 * Help command for both Users and Moderators.
 * In the newest Alaha Version (1.2.1) a new command has been introduced for all users: `.a message`. The Anonymous command allows any user to post messages anonymously; however, it is not complete anonymous, if a user begins to type in a channel others in the chat can tell who is typing. Also there is some time between the bot catching the command and deleting it, which users in the channel can have a split second to view the original user. Similarly, like the anonymous bots, staff can view the information behind the anonymous post but it is important to note that this will only happen if the post breaks server rules. Also in this update, the backend for updates on Broida and delete message log has undergone complete changes. The client event for `on_delete_message(message)` has now changed to `on_raw_message_delete(payload)`. This works with the new staff command: `.update`. When an update for broida is going to be released, one of the staff must use the update command to allow Broida to start collecting message for one day (you may also chain this commands for more than 1 day). This allows for the new session of the updated Broida to be able to view its passed message in case of deleted messages. This allows for developers to conduct updates to Broida without having to worry about previous sessions. All new commands are reflected in the help commands for users and staff.
+* With the latest Alpha Version (1.2.2), Broida now stores largest static list in a json file. Similarly, Broida has no begun using json files to externally store infomration to be able to recall it after sessions. Broida now allows for event reminders (specifically for moderators) and will allow for new events to be added by the `.add_event` command. The `.announcement` command now allows for command message edit to take into effect rather than deleting the via emoji. The `.winner` command now does not include staff members to be enter into the raffle pool. Lastly, the `.anonymous` command has expanded to Broida's DM. Simply use this format to target a viable text channel to post anonymously: `.anonymous general-chat Here is my message!`. Again a special thanks to Sarah Webster for helping build the anonymous DM feature. 
 
 #### Beta
 
