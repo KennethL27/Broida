@@ -69,10 +69,11 @@ list_of_commands = ['.physics', '.fiziks', '.uptime', '.dadjoke', '.update']
 ######################################
 open_exam = []
 
-# List of Users to handle for anonymity
+# List of Users to handle for anonymity and counter to reset lists
 ######################################
 user_list = []
 generated_user = []
+delete_counter = 0
 
 # Function for writing in json file given the file name
 ######################################
@@ -85,6 +86,31 @@ async def on_ready():
     bot_description = discord.Game('missing the crowds | .help')
     await client.change_presence(activity = bot_description)
     print('Bot is ready')
+    for i in range(1000000000):
+        event_date_list = []
+        event_name_list = []
+        with open ('Bot_Info.json') as bot_info_json:
+            data = json.load(bot_info_json)
+            for json_event in data['event']:
+                event_date_list.append(json_event["date"])
+                event_name_list.append(json_event["event-name"])
+        bot_command_channel = client.get_channel(bot_command_channel_id)
+        datetime_now = datetime.datetime.now()
+        name_index = 0
+        for date_string in event_date_list:
+            try:
+                date = datetime.datetime.strptime(date_string, '%m-%d-%Y %I:%M%p')
+            except:
+                date = datetime.datetime.strptime(date_string, '%m/%d/%Y %I:%M%p')
+            if datetime_now > date:
+                embed = discord.Embed(title = f'EVENT REMINDER', description = f'This reminder is for {event_name_list[name_index]}', 
+                    colour = 0Xfdbf32)
+                embed.set_footer(text = f'Timestamp - {datetime.datetime.now()}')
+                await bot_command_channel.send(embed = embed)
+                data["event"].pop(name_index)
+                write_json(data, 'Bot_Info.json')
+            name_index = name_index + 1
+        await asyncio.sleep(30)
 
 
 # Commands for any Users
@@ -116,91 +142,9 @@ async def merch(ctx):
 @client.command(aliases = ['fiziks'])
 async def physics(ctx):
     await ctx.message.delete()
-    phys_facts = ['Mass and inertia are the same thing. (Mass actually measures inertia - in kilogramsÂ… Much as monetary resources measures financial wealth - in dollars.)',
-    'Weight (force of gravity) decreases as you move away from the earth by distance squared. (It decreases, but only approaches zero, never reaching it, even far beyond the solar system.)',
-    'Weight (in newtons) is mass x acceleration (w = mg). Mass is not Weight! Mass is a scalar and measured in kilograms, weight is a force and a vector and measured in Newtons.',
-    'Velocity can only be constant when the net force (and acceleration) is zero. (The velocity can be zero and not constant - for example when a ball, thrown vertically, is at the top of its trajectory.)',
-    'Velocity, displacement [s], momentum, force (weight), torque, and acceleration are vectors.',
-    'Speed, distance [d], time, length, mass, temperature, charge, power and energy (joules) are scalar quantities.',
-    'The slope of the distance-time graph is velocity.',
-    'The slope of the velocity-time graph is acceleration.',
-    'The area under a velocity-time graph is distance.',
-    'Magnitude is a term used to state how large a vector quantity is.',
-    'At zero (0) degrees two vectors have a resultant equal to their sum. At 180 degrees two vectors have a resultant equal to their difference. From the minimum value (at 180) to the maximum value (at zero) is the total range of all the possible resultants of any two vectors.',
-    'An unbalanced force must produce an acceleration and the object cannot be in equilibrium.',
-    'If an object is not accelerating, it is in equilibrium and no unbalanced forces are acting.',
-    'The equilibrant force is equal in magnitude but opposite in direction to the resultant vector.',
-    'Momentum is conserved in all collision systems. Energy is conserved (in the KE of the objects) only if a collision is perfectly elastic.',
-    'Mechanical energy is the sum of the potential and kinetic energy.',
-    'UNITS: a = [m/sec2];  F = [kgÂ•m/sec2] = Newton;  work = PE = KE = [kgÂ•m2/sec2] = Joule;   Power = [kgÂ•m2/sec3] = [Joules/sec] = Watt',
-    '1ev is a very small energy unit equal to 1.6 x 10-19 joules - used for small objects such as electrons. This is on the Reference Chart.',
-    'Gravitational potential energy increases as height increases.',
-    'Kinetic energy changes only if mass or velocity changes.',
-    'Mechanical energy (PE + KE) does not change for a free falling mass or a swinging pendulum. (when ignoring air friction)',
-    'A coulomb is charge, an amp is current [coulomb/sec] and a volt is potential difference [joule/coulomb].',
-    'Short, fat, cold wires make the best conductors.',
-    'Electrons and protons have equal amounts of charge (1.6 x 10-19 coulombs each - known as one elementary charge). This is on the Reference Chart.',
-    'Adding a resistor in series increases the total resistance of a circuit.',
-    'Adding a resistor in parallel decreases the total resistance of a circuit.',
-    'All resistors in series have equal current (I).',
-    'All resistors in parallel have equal voltage (V).',
-    'If two similar charged spheres touch each other add the charges and divide by two to find the final charge on each sphere after they are separated.',
-    'Insulators contain no electrons free to move.',
-    'Ionized gases conduct electric current using positive ions, negative ions and electrons.',
-    'Electric fields all point in the direction of the force on a positive test charge.',
-    'Electric fields between two parallel plates are uniform in strength except at the edges.',
-    'Millikan determined the charge on a single electron using his famous oil-drop experiment.',
-    'All charge changes result from the movement of electrons not protons. (an object becomes positive by losing electrons)',
-    'The direction of a magnetic field is defined by the direction a compass needle points. (The direction an isolated north pole would feel.)',
-    'Magnetic fields point from the north to the south outside the magnet and south to north inside the magnet.',
-    'Magnetic flux is measured in webers.',
-    'Left hands are for negative charges and reverse answer for positive charges.',
-    'The first hand rule deals with the B-field around a current bearing wire, the third hand rule looks at the force on charges moving in a B-field, and the second hand rule is redundant.',
-    'Solenoids are stronger with more current or more wire turns or adding a soft iron core.',
-    'Sound waves are longitudinal and mechanical.',
-    'Light slows down, bends toward the normal and has a shorter wavelength when it enters a medium with a higher index of refraction (n).',
-    'All angles in wave theory problems are measured to the normal.',
-    'Blue light has more energy, a shorter wavelength and a higher frequency than red light (remember- ROYGBIV).',
-    'The electromagnetic spectrum (radio, infrared, visible. Ultraviolet x-ray and gamma) are listed lowest energy to highest. They are all electromagnetic and travel at the speed of light.',
-    'The speed (c) of all types of electromagnetic waves is 3.0 x 108 m/sec in a vacuum.',
-    "As the frequency of an electromagnetic wave increases its energy increases and its wavelength decreases and its velocity remains constant as long as it doesn't enter a medium with a different refractive index (i.e. optical density).",
-    'A prism produces a rainbow from white light by dispersion. (red bends the least because it slows the least).',
-    "Transverse wave particles vibrate back and forth perpendicular to the direction of the wave's velocity. Longitudinal wave particles vibrate back and forth parallel to the direction of the wave's velocity.",
-    'Light wave are transverse (they, and all (and only)transverse waves can be polarized).',
-    'The amplitude of a non-electromagnetic wave (i.e. water, string and sound waves) determines its energy. The frequency determines the pitch of a sound wave. Their wavelength is a function of its frequency and speed. Their speed depends on the medium they are traveling in.',
-    'Constructive interference occurs when two waves are zero (0) degrees out of phase or a whole number of wavelengths (360 degrees.) out of phase.',
-    'At the critical angle a wave will be refracted to 90 degrees. At angles larger than the critical angle, light is reflected not refracted.',
-    'Doppler effect: when a wave source moves toward you, you will perceive waves with a shorter wavelength and higher frequency than the waves emitted by the source. When a wave source moves away from you, you will perceive waves with a longer wavelength and lower frequency.',
-    'Double slit diffraction works because of diffraction and interference.',
-    'Single slit diffraction produces a much wider central maximum than double slit.',
-    'Diffuse reflection occurs from dull surfaces while regular (spectacular) reflection occurs from smooth (mirror-like) surfaces.',
-    'Only waves show diffraction, interference and the polarization.',
-    'The period of a wave is the inverse of its frequency (T = 1/f ). So waves with higher frequencies have shorter periods.',
-    'Monochromatic light has one frequency.',
-    'Coherent light waves are all in phase.',
-    'In order to explain the photoelectric effect, Einstein proposed particle behavior for light (and all electromagnetic waves) with E = h f and KEmax = hf Â– Wo.',
-    'A photon is a particle of light (wave packet).',
-    'To preserve the symmetry of the universe, DeBroglie proposed wave behavior for particles ( l = h/mv). Therefore large fast moving objects (baseballs, rockets) have very short wavelengths (that are unobservable) but very small objects, particularly when moving slowly have wavelengths that can be detected in the behavior of the objects.',
-    'Whenever charged particles are accelerated, electromagnetic waves are produced.',
-    'The lowest energy state of a atom is called the ground state.',
-    'Increasing light frequency increases the kinetic energy of the emitted photo-electrons in the photo-electric effect (KEmax = hf Â– Wo).',
-    'As the threshold frequency increases for a photo-cell (photo emissive material) the work function also increases (Wo = h fo)',
-    'Increasing light intensity increases the number of emitted photo-electrons in the photo-electric effect but not their KE (i.e. more intensity>more photons>more electrons emitted). This is the particle nature shown by light.',
-    'Key to understanding trajectories is to separate the motion into two independent components in different dimensions - normally horizontal and vertical. Usually the velocity in the horizontal dimension is constant (not accelerated) and the motion in the vertical dimension is changing (usually with acceleration of g).',
-    'Centripetal force and centripetal acceleration vectors are toward the center of the circle- while the velocity vector is tangent to the circle. (Centripetal means towards the center!)',
-    'An object in orbit is not weightless - it is its weight that keeps it moving in a circle around the astronomical mass it is orbiting. In other words, its weight is the centripetal force keeping it moving in a circle.',
-    'An object in orbit is in free fall - it is falling freely in response to its own weight. Any object inside a freely falling object will appear to be weightless.',
-    'Rutherford discovered the positive nucleus using his famous gold-foil experiment.',
-    'Fusion is the process in which hydrogen is combined to make helium.',
-    'Fission requires that a neutron causes uranium to be split into middle size atoms and produce extra neutrons, which, in turn, can go on and cause more fissions.',
-    'Radioactive half-lives are not effected by any changes in temperature or pressure (or anything else for that matter).',
-    'One AMU of mass is equal to 931 meV of energy. (E = mc2). This is on the Reference Charts!',
-    'Nuclear forces are very strong and very short-ranged.',
-    'There are two basic types of elementary particles: Hadrons & Leptons (see Chart).',
-    'There are two types of Hadrons: Baryons and Mesons (see Chart).',
-    'The two types of Hadrons are different because they are made up of different numbers of quarks. Baryons are made up of 3 quarks, and Mesons of a quark and antiquark.',
-    'Notice that to make long-lived Hadron particles quarks must combine in such a way as to give the charge of particle formed a multiple of the elementary charge.',
-    'For every particle in the "Standard Model" there is an antiparticle. The major difference of an antipartcle is that its charge is opposite in sign. All antiparticles will anhililate as soon as they come in contact with matter and will release a great amount of energy.']
+    with open ('Bot_string_list.json') as bot_string_list_json:
+        data = json.load(bot_string_list_json)
+        phys_facts = data["physics-facts"]
     await ctx.send(phys_facts[random.randint(0,len(phys_facts))])
 
 # Returns the list of other Discord Servers from UCSB
@@ -541,113 +485,9 @@ async def help(ctx):
 @client.command()
 async def dadjoke(ctx):
     await ctx.message.delete()
-    dad_jokes = ["What rock group has four men that don't sing? Mount Rushmore.", "When I was a kid, my mother told me I could be anyone I wanted to be. Turns out, identity theft is a crime.", 
-    "A guy goes to his doctor because he can see into the future. The doctor asks him 'How long have you suffered from that condition?' The guy tells him, 'Since next Monday.'",
-    "What do sprinters eat before a race? Nothing, they fast!",
-    "What concert costs just 45 cents? 50 Cent featuring Nickelback!",
-    "What do you call a mac 'n' cheese that gets all up in your face? Too close for comfort food!",
-    "Why couldn't the bicycle stand up by itself? It was two tired!",
-    "Did you hear about the restaurant on the moon? Great food, no atmosphere!",
-    "Why do melons have weddings? Because they cantaloupe!",
-    "What happens when you go to the bathroom in France? European.",
-    "What's the difference between a poorly dressed man on a tricycle and a well-dressed man on a bicycle? Attire!",
-    "How many apples grow on a tree? All of them!",
-    "Did you hear the rumor about butter? Well, I'm not going to spread it!",
-    "Did you hear about the guy who invented Lifesavers?  They say he made a mint!",
-    "Last night I had a dream that I weighed less than a thousandth of a gram. I was like, 0mg.",
-    "A cheese factory exploded in France. Da brie is everywhere!",
-    "Why did the old man fall in the well? Because he couldn't see that well!",
-    "What do you call a factory that sells passable products? A satisfactory!",
-    "Why did the invisible man turn down the job offer? He couldn't see himself doing it!",
-    "Want to hear a joke about construction? I'm still working on it!",
-    "I was really angry at my friend Mark for stealing my dictionary. I told him, 'Mark, my words!'",
-    "How does Moses make his coffee? Hebrews it.",
-    "I'm starting a new dating service in Prague. It's called Czech-Mate.",
-    "I was just reminiscing about the beautiful herb garden I had when I was growing up.\nGood thymes.",
-    "Do you know the last thing my grandfather said to me before he kicked the bucket?",
-    "Grandson, watch how far I can kick this bucket.",
-    "I like telling Dad jokes. Sometimes he laughs!",
-    "Why did the scarecrow win an award? Because he was outstanding in his field!",
-    "What do you call a fish with two knees? A two-knee fish!",
-    "Why do you never see elephants hiding in trees? Because they're so good at it!",
-    "How does a penguin build its house? Igloos it together!",
-    "Why don't skeletons ever go trick or treating? Because they have no body to go with!",
-    "This graveyard looks overcrowded. People must be dying to get in there!",
-    "What's ET short for? Because he's only got tiny legs!",
-    "What's brown and sticky? A stick!",
-    "Can February march? No, but April may!",
-    "What's orange and sounds like a parrot? A carrot!",
-    "How do you make a Kleenex dance? Put some boogie in it!",
-    "Why is Peter Pan always flying? He neverlands!",
-    "What's a ninja's favorite type of shoes? Sneakers!",
-    "What do Santa's elves listen to ask they work? Wrap music!",
-    "Did you hear about the bacon cheeseburger who couldn't stop telling jokes? It was on a roll.",
-    "Student: 'Can I go to the bathroom?'",
-    "Teacher: 'It's 'may.''",
-    "Student: 'No, it's January.'",
-    "Why was the coach yelling at a vending machine? He wanted his quarter back.",
-    "Why do vampires seem sick? They're always coffin.",
-    "Within minutes, the detectives knew what the murder weapon was. It was a brief case.",
-    "To whoever stole my copy of Microsoft Office, I will find you. You have my Word!",
-    "I used to work in a shoe-recycling shop. It was sole destroying!",
-    "My boss told me to have a good day, so I went home!",
-    "I'm so good at sleeping I can do it with my eyes closed!",
-    "Spring is here! I got so excited I wet my plants!",
-    "I thought about going on an all-almond diet… But that's just nuts!",
-    "My friend says to me, 'What rhymes with orange?' And I told him, 'No it doesn't!'",
-    "My wife told me I had to stop acting like a flamingo. So I had to put my foot down!",
-    "I told my girlfriend she drew her eyebrows too high. She seemed surprised!",
-    "I tell dad jokes but I have no kids…I'm a faux pa!",
-    "So a vowel saves another vowel's life. The other vowel says, 'Aye E! I owe you!'",
-    "Did I tell you the time I fell in love during a backflip? I was heels over head!",
-    "My uncle named his dogs Rolex and Timex. They're his watch dogs!",
-    "If you see a robbery at an Apple Store does that make you an iWitness?!",
-    "I would avoid the sushi if I were you. It's a little fishy!",
-    "Five out of four people admit they're bad with fractions!",
-    "Two goldfish are in a tank. One says to the other, 'Do you know how to drive this thing?'",
-    "I'll call you later. Don't call me later, call me Dad!",
-    "Did you hear about the Italian chef who died? He pasta way!",
-    "When the grocery store clerk asks me if I want the milk in a bag, I always tell him, 'No, I'd rather drink it out of the carton!'",
-    "The difference between a numerator and a denominator is a short line. Only a fraction of people will understand this!",
-    "I don't play soccer because I enjoy the sport. I'm just doing it for kicks!",
-    "I invented a new word today: Plagiarism!",
-    "What do you call a donkey with only three legs? A wonkey!",
-    "After dinner, my wife asked if I could clear the table. I needed a running start, but I made it!",
-    "This morning, Siri said, 'Don't call me Shirley.' I accidentally left my phone in Airplane mode!",
-    "A woman is on trial for beating her husband to death with his guitar collection. The judge asks her, 'First offender?' She says, 'No, first a Gibson! Then a Fender!'",
-    "I know a lot of jokes about retired people but none of them work!",
-    "What do you call a guy with a rubber toe? Roberto!",
-    "What rhymes with boo and stinks? You!",
-    "I accidentally dropped my pillow on the floor. I think it has a concushion.",
-    "Someone complimented my parking today! They left a sweet note on my windshield that said 'parking fine.'",
-    "St. Francis worked at Krispy Kreme. He was a deep friar.",
-    "In America, using the metric system can get you in legal trouble. In fact, if you sneer at any other method of measuring liquids, you may be held in contempt of quart.",
-    "I found a wooden shoe in my toilet today. It was clogged.",
-    "Some people can't distinguish between etymology and entomology. They bug me in ways I can't put into words.",
-    "My hotel tried to charge me ten dollars extra for air conditioning. That wasn't cool.",
-    "If an English teacher is convicted of a crime and doesn't complete the sentence, is that a fragment?",
-    "I think my wife is putting glue on my antique weapons collection. She denies it but I'm sticking to my guns!",
-    "Which U.S. state is famous for its extra-small soft drinks? Minnesota!",
-    "I got a hen to regularly count her own eggs. She's a real mathamachicken!",
-    "What did the Ranch say when someone opened the refrigerator door? 'Close the door, I'm dressing!'",
-    "Why do trees seem suspicious on sunny days? They just seem a little shady!",
-    "What did the policeman say to his belly button? You're under a vest!",
-    "What do you call a fake noodle? An Impasta!",
-    "I've been bored recently so I've decided to take up fencing. The neighbors said they will call the police unless I put it back.",
-    "Why did the math book look so sad? Because of all of its problems!",
-    "I don't really call for funerals that start before noon. I guess I'm just not a mourning person!",
-    "If two vegans get in a fight, is it still considered a beef?",
-    "One of my favorite memories as a kid was when my brothers used to put me inside a tire and roll me down a hill. They were Goodyears!",
-    "I'm addicted to collecting vintage Beatles albums. I need Help!",
-    "What does the cell say to his sister when she steps on his toe? 'Oh my toe sis!'",
-    "I never buy pre-shredded cheese. Because doing it yourself is grate.",
-    "I was playing chess with my friend and he said, 'Let's make this interesting.' So we stopped playing chess.",
-    "How do you tell the difference between a bull and a milk cow? It is either one or the utter.",
-    "I have a great joke about nepotism. But I'll only tell it to my kids.",
-    "What do scholars eat when they're hungry? Academia nuts.",
-    "What do you call an ant that has been shunned by his community? A socially dissed ant.",
-    "A Vicks VapoRub truck overturned on the highway this morning. Amazingly, there was no congestion for eight hours!",
-    "When does a joke become a dad joke? When it becomes apparent."]
+    with open ('Bot_string_list.json') as bot_string_list_json:
+        data = json.load(bot_string_list_json)
+        dad_jokes = data["dad-jokes"]
     await ctx.send(dad_jokes[random.randint(0, len(dad_jokes))])
 
 # Returns the links for setting up an apointment with JD or Cooper (physics Advisors)
@@ -670,6 +510,80 @@ async def dates(ctx):
     embed.set_image(url = 'https://cdn.discordapp.com/attachments/700224899721199626/794508278809100309/UCSBLogo.png')
     await ctx.send(embed = embed)
 
+# Anonomity across all channels, use the anonymous code as a command. Will lack the complete anonymity but alllows for a simple anonymous post across the server
+######################################
+@client.command(aliases=['anonymity','a'])
+async def anonymous(ctx,*,user_message):
+    global delete_counter
+    k = 0
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        channel_name = ''
+        for i in range(len(user_message)):
+            cha = user_message[i]
+            if cha == ' ':
+                user_message = user_message[i:]
+                break
+            else:
+                channel_name += cha
+
+        guild = client.get_guild(guild_id)
+        channel = discord.utils.get(guild.channels, name = channel_name)
+        
+        if channel == None:
+            await ctx.send('{} is not a valid channel name\nUse the format .a channel-name message'.format(channel_name))
+            return
+
+        member = guild.get_member(user_name.id)
+        permissions = channel.permissions_for(member)
+        if permissions.view_channel == False or permissions.send_messages == False:
+            await ctx.send('You do not have permissions to send messages in the channel {}'.format(channel_name))
+            return
+    else:
+        channel = ctx.channel
+    
+    user_message = user_message.replace('@everyone', '@ everyone').replace('@here', '@ here')
+
+    if user_name not in user_list:
+        user = random.randint(0,9999)
+        user_list.append(user_name)
+        generated_user.append(f'User{user}')
+
+        if not(isinstance(ctx.channel, discord.channel.DMChannel)):
+            await ctx.message.delete()
+        anonymous_message = await channel.send(f'User{user}: {user_message}')
+        delete_counter = delete_counter + 1
+        anonymous_message_id = anonymous_message.id
+        
+        with open ("Anonymous_Log.json") as anonymous_log_json:
+            data = json.load(anonymous_log_json)
+            message_log = data['anonymous_message']
+            new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
+            message_log.append(new_entry)
+        write_json(data, "Anonymous_Log.json")
+
+    elif user_name in user_list:
+        for i in user_list:
+            if i == user_name:
+
+                if not(isinstance(ctx.channel, discord.channel.DMChannel)):
+                    await ctx.message.delete()
+                anonymous_message = await channel.send(f'{generated_user[k]}: {user_message}')
+                delete_counter = delete_counter + 1
+                anonymous_message_id = anonymous_message.id
+
+                with open ("Anonymous_Log.json") as anonymous_log_json:
+                    data = json.load(anonymous_log_json)
+                    message_log = data['anonymous_message']
+                    new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
+                    message_log.append(new_entry)
+                write_json(data, "Anonymous_Log.json")
+
+            k = k + 1
+    if delete_counter == 30:
+        user_list.clear()
+        generated_user.clear()
+        delete_counter = 0
 
 # Commands for any Moderators
 ##################################################################################################################
@@ -681,6 +595,7 @@ async def dates(ctx):
 @client.command(aliases = ['anouce', 'post'])
 @commands.has_any_role(founder_id, admin_id, treasurer_id)
 async def announcement(ctx, date, time, *, announcement): #need to be able to edit before it goes live just in case
+    original_message = ctx.message
     channel = client.get_channel(announcement_channel_id)
     if date == 'today' and time == 'now':
         await channel.send(content = announcement)
@@ -711,12 +626,27 @@ async def announcement(ctx, date, time, *, announcement): #need to be able to ed
 
         while datetime.datetime.now() < release: #holds off the change in permission until the start time
             await asyncio.sleep(1)
+            edit_message_time = original_message.edited_at
+            if not edit_message_time:
+                pass
+            else:
+                command_message_edit = original_message.content
+                am_split = command_message_edit.split('am',1)
+                pm_split = command_message_edit.split('pm',1)
+                if len(am_split[0]) < len(pm_split[0]):
+                    new_announcement = am_split[1]
+                else:
+                    new_announcement = pm_split[1]
+                await message.edit(content = f'__The post will look like:__\n{new_announcement}')
+
             use_message = await message.channel.fetch_message(message.id)
             if use_message.reactions[0].count > 1:
                 await ctx.send(f"You have deleted the announcement, please resend your announcement to be posted.")
                 return 
-        
-        await channel.send(content = announcement)
+        try:
+            await channel.send(content = new_announcement)
+        except:
+            await channel.send(content = announcement)
 
 # AutoModeration, listens to message and looks for certain words
 # Currently Not in Use. 
@@ -1242,7 +1172,7 @@ async def winner(ctx, channel : discord.TextChannel):
             try:
                 for j in i.author.roles:
                     role_list.append(j.id)
-                if (founder_id or admin_id or treasurer_id or mod_id) not in role_list:
+                if not any(role in role_list for role in [founder_id, admin_id, treasurer_id, mod_id]):
                     unique_members.append(i.author.mention)
             except:
                 if i.author.mention not in not_in_server:
@@ -1264,6 +1194,58 @@ async def winner(ctx, channel : discord.TextChannel):
     await ctx.send(embed = embed)
     print(unique_members)
 
+@client.command()
+@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
+async def add_event(ctx, event_name : str, event_time : str):
+    with open('Bot_Info.json') as bot_info_json:
+        data = json.load(bot_info_json)
+        data["event"].append({"date" : event_time, "event-name": event_name})
+    write_json(data, 'Bot_Info.json')
+
+# Allows staff to trigger an update, for one day the bot will track messages so that when the update hits, deleted messages can be track from its previous sessions.
+######################################
+@client.command()
+@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
+async def update(ctx):
+    await ctx.message.delete()
+    global update_status
+    if ctx.channel.id != bot_command_channel_id:
+        message = await ctx.send("Please do not use this command here!")
+        await message.delete(delay = 5)
+    else: 
+        update_status = True
+        await ctx.send('Scheduling update for 1 day in advance.')
+        await asyncio.sleep(30) #for 24 hrs = 86400
+        update_status = False
+        await ctx.send('Update will soon begin!')
+
+# Allows the staff to view the anonymous message, only use when neccessary, planning on adding a feature to only allow the message to show if 3 or more staff approve
+######################################
+@client.command(aliases=['afind'])
+@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
+async def anonymous_finder(ctx,message_id):
+    status = False
+    try:
+        message_id = int(message_id)
+    except:
+        await ctx.send('Please use the id of the message.')
+    if ctx.channel.id != bot_command_channel_id:
+        await ctx.message.delete()
+        message = await ctx.send("Please do not use this command here!")
+        await message.delete(delay = 5)
+    else:
+        with open ('Anonymous_Log.json') as anonymous_log_json:
+            data = json.load(anonymous_log_json)
+            for json_message in data['anonymous_message']:
+                if json_message['id'] == message_id:
+                    author = json_message['author']
+                    channel = json_message['channel']
+                    message = json_message['message']
+                    content = f'User: {author} \nChannel: {channel}\nMessage: {message}'
+                    await ctx.send(content)
+                    status = True
+            if status == False:
+                await ctx.send('There is no data on the message you selected.')
 
 # Commands In Progress (Beta)
 ##################################################################################################################
@@ -1352,89 +1334,13 @@ async def non_gaucho(ctx):
 
     print(non_gaucho_members)
 
-# Anonomity across all channels, use the anonymous code as a command. Will lack the complete anonymity but alllows for a simple anonymous post across the server
-######################################
-@client.command(aliases=['anonymity','a'])
-async def anonymous(ctx,*,user_message):
-    k = 0
-    user_name = ctx.author
-    channel = ctx.channel
-    if user_name not in user_list:
-        user = random.randint(0,9999)
-        user_list.append(user_name)
-        generated_user.append(f'User{user}')
+@client.event
+async def on_member_join(user):
+    await user.send('Welcome to UCSB Physics Server, please fill out this form to gain access')
 
-        await ctx.message.delete()
-        anonymous_message = await ctx.send(f'User{user}: {user_message}')
-        anonymous_message_id = anonymous_message.id
-        
-        with open ("Anonymous_Log.json") as anonymous_log_json:
-            data = json.load(anonymous_log_json)
-            message_log = data['anonymous_message']
-            new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
-            message_log.append(new_entry)
-        write_json(data, "Anonymous_Log.json")
-
-    elif user_name in user_list:
-        for i in user_list:
-            if i == user_name:
-
-                await ctx.message.delete()
-                anonymous_message = await ctx.send(f'{generated_user[k]}: {user_message}')
-                anonymous_message_id = anonymous_message.id
-
-                with open ("Anonymous_Log.json") as anonymous_log_json:
-                    data = json.load(anonymous_log_json)
-                    message_log = data['anonymous_message']
-                    new_entry = {"id": anonymous_message_id, "author": user_name.mention, "channel": channel.mention, "message": user_message}
-                    message_log.append(new_entry)
-                write_json(data, "Anonymous_Log.json")
-
-            k = k + 1
-
-# Allows the staff to view the anonymous message, only use when neccessary, planning on adding a feature to only allow the message to show if 3 or more staff approve
-######################################
-@client.command(aliases=['afind'])
-@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
-async def anonymous_finder(ctx,message_id):
-    status = False
-    try:
-        message_id = int(message_id)
-    except:
-        await ctx.send('Please use the id of the message.')
-    if ctx.channel.id != bot_command_channel_id:
-        await ctx.message.delete()
-        message = await ctx.send("Please do not use this command here!")
-        await message.delete(delay = 5)
-    else:
-        with open ('Anonymous_Log.json') as anonymous_log_json:
-            data = json.load(anonymous_log_json)
-            for json_message in data['anonymous_message']:
-                if json_message['id'] == message_id:
-                    author = json_message['author']
-                    channel = json_message['channel']
-                    message = json_message['message']
-                    content = f'User: {author} \nChannel: {channel}\nMessage: {message}'
-                    await ctx.send(content)
-                    status = True
-            if status == False:
-                await ctx.send('There is no data on the message you selected.')
-
-# Allows staff to trigger an update, for one day the bot will track messages so that when the update hits, deleted messages can be track from its previous sessions.
-######################################
-@client.command()
-@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
-async def update(ctx):
-    await ctx.message.delete()
-    global update_status
-    if ctx.channel.id != bot_command_channel_id:
-        message = await ctx.send("Please do not use this command here!")
-        await message.delete(delay = 5)
-    else: 
-        update_status = True
-        await ctx.send('Scheduling update for 1 day in advance.')
-        await asyncio.sleep(30) #for 24 hrs = 86400
-        update_status = False
-        await ctx.send('Update will soon begin!')
+@client.event
+async def on_member_remove(user):
+    channel = client.get_channel(bot_command_channel_id)
+    await channel.send(f'Oh no! Looks like {user} has left the server.')
 
 client.run('TOKEN')
