@@ -1,0 +1,15 @@
+{
+    "exam": [
+        {
+            "date": "datetime format",
+            "course-channel": "channel name",
+            "course-role": "role name"
+        }
+    ],
+    "event": [
+        {
+            "date": "4-15-2021 8:30pm",
+            "event-name": "Study Grind"
+        }
+    ]
+}
