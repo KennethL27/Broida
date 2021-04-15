@@ -1,6 +1,6 @@
 # Broida
 Alpha: *Version 1.2.1*
-Beta: *Version 2.2.4*
+Beta: *Version 2.2.5*
 
 ![Broida Discord Profile](https://raw.githubusercontent.com/KennethL27/Broida/master/Images/Broida_Profile.jpg "Broida Discord Profile") 
 
@@ -38,6 +38,13 @@ ___
 * With Beta Version (2.2.2) user command messages will no longer be deleted, this helps spread the acknowledgement of these commands and will help aim more use of Broida. 
 * With Beta Version (2.2.3) a new staff command is created: update. This feature allows for seamless update of the bot on the client side. Previously, when an update was conducted, deleted messages from the previous session the information was lost. This can cause issues when moderations situation occurs. With the update command, Broida will start collecting all messages for a day, then the update can take place and the messages will be safely be stored. With the next Beta Version, the deleted_message event will improved upon this new command. 
 * With Beta Version (2.2.4) a new system is now in place for messages to be saved from one code session to another. To fully use this new feature you must use the command detailed above (in version 2.2.3): `.update`. This allows Broida to start gathering messages being sent through the server for one day. Then once Broida is updated, any deleted messages that happened in that day Broida will be able to check the file for that message. This will send the deleted message to the deleted-message-log for staff to view in case of a situation.
+* With Beta Version (2.2.5) there has been a big improvement on how data is going to be stored with Broida. 
+1. With this new version there is now two new json files: Bot_Info.json and Bot_string_list.json. The first one will provide useful information such as exam times and events. This information will stay across different sessions. Similarly, the second json file being introduce is to reduce the amount of storage Broida has to hold by replacing the two biggest list into a json file, which Broida can access. 
+2. A nice feature being introudce is event reminders, this is set up in the `on_ready()` function and conintues to run in the background of Broida, which works hand-in-hand with the new `.add_event` command. For now it only serves a purpose to the staff and not to every member. Expanding this feature to the whole server depends on its usefullness.
+3. A huge improvment has been added to the `.announcement` command! Now staff members can edit their command message, containing the announcement, and Broida will now be able to edit and update each time you make any changes. The trash bin emoji can still serve this function, but its main focus will be to completely eliminate the announcment or change the date/time. The next update for this command will allow staff to edit the date/time on the original message.
+4. The bugs found in the `.winner` command have now been fixed, it no longer allows staff members to be part of the raffle pool.
+5. Two projects has been started for keeping track of new users and exiting users. The functions for this feature are `on_member_join()` and `on_member_remove()`.
+6. Lastly, the largest update in this version is `.anonymous`, which will now allow users to DM Broida in order for them to send completely anonymous messages within the server. As long as the user is able to see and able to send messages in the channel of their choosing, then Broida will be allowed to send anonymous messages for you. This command has also been setup to be able to clear the user generated number ever so often, to retain anonymous. *Important note: staff members can still use `.anonymous_finder`*
 
 ___
 
