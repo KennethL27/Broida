@@ -1194,6 +1194,8 @@ async def winner(ctx, channel : discord.TextChannel):
     await ctx.send(embed = embed)
     print(unique_members)
 
+# Allows moderators to add a reminder for a future event 
+######################################
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
 async def add_event(ctx, event_name : str, event_time : str):
