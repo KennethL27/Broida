@@ -45,6 +45,7 @@ ___
 4. The bugs found in the `.winner` command have now been fixed, it no longer allows staff members to be part of the raffle pool.
 5. Two projects has been started for keeping track of new users and exiting users. The functions for this feature are `on_member_join()` and `on_member_remove()`.
 6. Lastly, the largest update in this version is `.anonymous`, which will now allow users to DM Broida in order for them to send completely anonymous messages within the server. As long as the user is able to see and able to send messages in the channel of their choosing, then Broida will be allowed to send anonymous messages for you. This command has also been setup to be able to clear the user generated number ever so often, to retain anonymous. *Important note: staff members can still use `.anonymous_finder`*
+Special thanks to Sarah Webster for helping me out with the updated version of the `.anonymous` command.
 
 ___
 
