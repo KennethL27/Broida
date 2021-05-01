@@ -1,9 +1,10 @@
 {
     "exam": [
         {
-            "date": "datetime format",
-            "course-channel": "channel name",
-            "course-role": "role name"
+            "start-date": "5-1-2021 11:00am",
+            "end-date": "5-2-2021 11:00am",
+            "course-channel": 12345678910,
+            "course-role": 12345678910
         }
     ],
     "event": [
