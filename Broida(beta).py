@@ -89,11 +89,13 @@ async def on_ready():
     for i in range(1000000000):
         event_date_list = []
         event_name_list = []
+        event_mentions = []
         with open ('Bot_Info.json') as bot_info_json:
             data = json.load(bot_info_json)
             for json_event in data['event']:
                 event_date_list.append(json_event["date"])
                 event_name_list.append(json_event["event-name"])
+                event_mentions.append(json_event["mentions"])
         bot_command_channel = client.get_channel(bot_command_channel_id)
         datetime_now = datetime.datetime.now()
         name_index = 0
@@ -106,6 +108,9 @@ async def on_ready():
                 embed = discord.Embed(title = f'EVENT REMINDER', description = f'This reminder is for {event_name_list[name_index]}', 
                     colour = 0Xfdbf32)
                 embed.set_footer(text = f'Timestamp - {datetime.datetime.now()}')
+                if 'Null' not in event_mentions[name_index]: 
+                    mentions = event_mentions[name_index].replace('None', '').replace(',', '')
+                    embed.add_field(name = 'Mentions', value = mentions)
                 await bot_command_channel.send(embed = embed)
                 data["event"].pop(name_index)
                 write_json(data, 'Bot_Info.json')
@@ -1198,10 +1203,12 @@ async def winner(ctx, channel : discord.TextChannel):
 ######################################
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
-async def add_event(ctx, event_name : str, event_time : str):
+async def add_event(ctx, event_name : str, event_time : str, mention1 = None, mention2 = None, mention3 = None, mention4 = None, mention5 = None):
+    if mention1 == None:
+        mention1 = 'Null'
     with open('Bot_Info.json') as bot_info_json:
         data = json.load(bot_info_json)
-        data["event"].append({"date" : event_time, "event-name": event_name})
+        data["event"].append({"date" : event_time, "event-name": event_name, "mentions": f'{mention1}, {mention2}, {mention3}, {mention4}, {mention5}'})
     write_json(data, 'Bot_Info.json')
 
 # Allows staff to trigger an update, for one day the bot will track messages so that when the update hits, deleted messages can be track from its previous sessions.
