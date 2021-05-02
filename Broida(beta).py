@@ -81,11 +81,72 @@ def write_json(data, file_name):
     with open (file_name, 'w') as file:
         json.dump(data, file, indent = 4)
 
+async def exam_execution(channel, role, start_date, end_date, index):
+    guild = client.get_guild(guild_id)
+    channel = client.get_channel(channel)
+    role = guild.get_role(role)
+    bot_command_channel = client.get_channel(bot_command_channel_id)
+
+    try:
+        start_datetime = datetime.datetime.strptime(start_date, '%m-%d-%Y %I:%M%p')
+    except:
+        start_datetime = datetime.datetime.strptime(start_date, '%m/%d/%Y %I:%M%p')
+
+    try:
+        end_datetime = datetime.datetime.strptime(end_date, '%m-%d-%Y %I:%M%p')
+    except:
+        end_datetime = datetime.datetime.strptime(end_date, '%m/%d/%Y %I:%M%p')
+
+    open_exam_text = f'{channel.mention} has an exam from {start_date} to {end_date}'
+    open_exam.append(open_exam_text)
+
+    message = await bot_command_channel.send(f'The settings for #{channel} from {start_date} to {end_date} will have an exam. This message is being sent becuase Broida had to restart.')
+
+    await message.add_reaction('🗑️')
+      
+    while datetime.datetime.now() < start_datetime:
+        await asyncio.sleep(1)
+        use_message = await message.channel.fetch_message(message.id)
+        if use_message.reactions[0].count > 1:
+            await bot_command_channel.send(f"You have deleted the exam time for #{channel.mention}, please re-enter another timeslot for this course's exam.")
+            # remove it from the json file
+            with open ('Bot_Info.json') as bot_info_json:
+                data = json.load(bot_info_json)
+            data["exam"].pop(index)
+            write_json(data, 'Bot_Info.json')
+            return 
+    
+    await bot_command_channel.send(f'The settings of #{channel} will now be changed to "only read".')
+    await channel.send('Good luck with your final! You can do it')
+    await channel.set_permissions(role, read_messages= True, read_message_history = True,send_messages = False, connect = False)
+
+    while datetime.datetime.now() < end_datetime:
+        await asyncio.sleep(1)
+    
+    open_exam.remove(open_exam_text)
+    await channel.send('Congrats you have finished, please keep in mind some students might still be taking the final but feel free to start chatting again.')
+    await channel.set_permissions(role, read_messages= True, read_message_history = True,send_messages = True, connect = True)
+    # remove it from the json file
+    with open ('Bot_Info.json') as bot_info_json:
+        data = json.load(bot_info_json)
+    data["exam"].pop(index)
+    write_json(data, 'Bot_Info.json')
+
 @client.event
 async def on_ready():
     bot_description = discord.Game('missing the crowds | .help')
     await client.change_presence(activity = bot_description)
     print('Bot is ready')
+
+    open_exam.clear()
+    with open ('Bot_Info.json') as bot_info_json:
+        data = json.load(bot_info_json)
+        index = 0
+        for json_exam in data['exam']:
+            # error on the line below, the next line must complete one by one instead of call the function and move on. 
+            await exam_execution(json_exam["course-channel"], json_exam["course-role"], json_exam["start-date"], json_exam["end-date"], index)
+            index = index + 1
+
     for i in range(1000000000):
         event_date_list = []
         event_name_list = []
@@ -757,69 +818,107 @@ async def on_raw_message_delete(payload):
 # Exam Command 2.0a, Moderators able to close a course channel from time1 to time2.
 ######################################
 @client.command()
-async def pexam(ctx, channel : discord.TextChannel, role : discord.Role, space, date, time1, to, time2):
-    month = int(re.split('/|-',date)[0])
-    day = int(re.split('/|-',date)[1])
-    year = int(re.split('/|-',date)[2])
+# async def pexam(ctx, channel : discord.TextChannel, role : discord.Role, space, date, time1, to, time2):
+async def pexam(ctx, channel : discord.TextChannel, role : discord.Role, start_date : str, end_date : str):
+    with open('Bot_Info.json') as bot_info_json:
+        data = json.load(bot_info_json)
+        data["exam"].append({"start-date" : start_date, "end-date": end_date, "course-channel": channel.id, "course-role" : role.id})
+    write_json(data, 'Bot_Info.json')
 
-    hour1 = int(re.split(':', time1)[0]) 
-    hour2 = int(re.split(':', time2)[0])
+    try:
+        start_datetime = datetime.datetime.strptime(start_date, '%m-%d-%Y %I:%M%p')
+    except:
+        start_datetime = datetime.datetime.strptime(start_date, '%m/%d/%Y %I:%M%p')
 
-    minute1 = int(re.split(':|am|pm', time1)[1])
-    minute2 = int(re.split(':|am|pm', time2)[1])
+    try:
+        end_datetime = datetime.datetime.strptime(end_date, '%m-%d-%Y %I:%M%p')
+    except:
+        end_datetime = datetime.datetime.strptime(end_date, '%m/%d/%Y %I:%M%p')
 
-    minute_reader1 = re.split(':|am|pm', time1)[1]
-    minute_reader2 = re.split(':|am|pm', time2)[1]
+    # month = int(re.split('/|-',date)[0])
+    # day = int(re.split('/|-',date)[1])
+    # year = int(re.split('/|-',date)[2])
 
-    if 'am' in time1:
-        if hour1 == 12:
-            militaryhour1 = 0
-        else:
-            militaryhour1 = hour1
-    if 'pm' in time1:
-        if hour1 == 12:
-            militaryhour1 = 12
-        else:
-            militaryhour1 = hour1 + 12
+    # hour1 = int(re.split(':', time1)[0]) 
+    # hour2 = int(re.split(':', time2)[0])
 
-    if 'am' in time2:
-        if hour2 == 12:
-            militaryhour2 = 0
-        else:
-            militaryhour2 = hour2
-    if 'pm' in time2:
-        if hour2 == 12:
-            militaryhour2 = 12
-        else:
-            militaryhour2 = hour2 + 12
+    # minute1 = int(re.split(':|am|pm', time1)[1])
+    # minute2 = int(re.split(':|am|pm', time2)[1])
+
+    # minute_reader1 = re.split(':|am|pm', time1)[1]
+    # minute_reader2 = re.split(':|am|pm', time2)[1]
+
+    # if 'am' in time1:
+    #     if hour1 == 12:
+    #         militaryhour1 = 0
+    #     else:
+    #         militaryhour1 = hour1
+    # if 'pm' in time1:
+    #     if hour1 == 12:
+    #         militaryhour1 = 12
+    #     else:
+    #         militaryhour1 = hour1 + 12
+
+    # if 'am' in time2:
+    #     if hour2 == 12:
+    #         militaryhour2 = 0
+    #     else:
+    #         militaryhour2 = hour2
+    # if 'pm' in time2:
+    #     if hour2 == 12:
+    #         militaryhour2 = 12
+    #     else:
+    #         militaryhour2 = hour2 + 12
         
-    start_time = datetime.datetime(year, month, day, militaryhour1, minute1, 0)
-    end_time = datetime.datetime(year, month, day, militaryhour2, minute2, 0)
+    # start_time = datetime.datetime(year, month, day, militaryhour1, minute1, 0)
+    # end_time = datetime.datetime(year, month, day, militaryhour2, minute2, 0)
 
-    open_exam_text = f'{channel.mention} has an exam from {militaryhour1}:{minute_reader1} on {month}/{day}/{year} to {militaryhour2}:{minute_reader2}'
+    # open_exam_text = f'{channel.mention} has an exam from {militaryhour1}:{minute_reader1} on {month}/{day}/{year} to {militaryhour2}:{minute_reader2}'
+    open_exam_text = f'{channel.mention} has an exam from {start_date}  to {end_date}'
     open_exam.append(open_exam_text)
 
-    message = await ctx.send(f'You will now change the settings of #{channel} at {militaryhour1}:{minute_reader1} on {month}/{day}/{year} to {militaryhour2}:{minute_reader2} on {month}/{day}/{year}')
-    
+    # message = await ctx.send(f'You will now change the settings of #{channel} at {militaryhour1}:{minute_reader1} on {month}/{day}/{year} to {militaryhour2}:{minute_reader2} on {month}/{day}/{year}')
+    message = await ctx.send(f'You will now change the settings of #{channel} from {start_date} to {end_date}')
+
     await message.add_reaction('🗑️')
 
-    while datetime.datetime.now() < start_time: #holds off the change in permission until the start time      
+    # while datetime.datetime.now() < start_time: #holds off the change in permission until the start time      
+    while datetime.datetime.now() < start_datetime:
         await asyncio.sleep(1)
         use_message = await message.channel.fetch_message(message.id)
         if use_message.reactions[0].count > 1:
             await ctx.send(f"You have deleted the exam time for #{channel.mention}, please re-enter another timeslot for this course's exam.")
+            with open('Bot_Info.json') as bot_info_json:
+                data = json.load(bot_info_json)
+            index = 0
+            for exam_entry in data["exam"]:
+                if exam_entry["course-channel"] == channel.id and exam_entry["course-role"] == role.id and exam_entry["start-date"] == start_date and exam_entry["end-date"] == end_date:
+                    data["exam"].pop(index)
+                    write_json(data, 'Bot_Info.json')
+                else:
+                    index = index + 1
             return 
     
     await ctx.send(f'The settings of #{channel} will now be changed to "only read".')
     await channel.send('Good luck with your final! You can do it')
     await channel.set_permissions(role, read_messages= True, read_message_history = True,send_messages = False, connect = False)
 
-    while datetime.datetime.now() < end_time: #holds off the change back to the permission
+    # while datetime.datetime.now() < end_time: #holds off the change back to the permission
+    while datetime.datetime.now() < end_datetime:
         await asyncio.sleep(1)
     
     open_exam.remove(open_exam_text)
     await channel.send('Congrats you have finished, please keep in mind some students might still be taking the final but feel free to start chatting again.')
     await channel.set_permissions(role, read_messages= True, read_message_history = True,send_messages = True, connect = True)
+    with open('Bot_Info.json') as bot_info_json:
+        data = json.load(bot_info_json)
+    index = 0
+    for exam_entry in data["exam"]:
+        if exam_entry["course-channel"] == channel.id and exam_entry["course-role"] == role.id and exam_entry["start-date"] == start_date and exam_entry["end-date"] == end_date:
+            data["exam"].pop(index)
+            write_json(data, 'Bot_Info.json')
+        else:
+            index = index + 1
 
 # Exam Command 1.0a, Moderators able to close a course channel from time1 to time2.
 ######################################
