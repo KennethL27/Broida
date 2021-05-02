@@ -75,6 +75,9 @@ user_list = []
 generated_user = []
 delete_counter = 0
 
+# List of users' ids to skip for banning 
+avoid_gaucho_member = []
+
 # Function for writing in json file given the file name
 ######################################
 def write_json(data, file_name):
@@ -257,6 +260,7 @@ async def ticket(ctx, member : discord.Member, * , reason):
 
         '''for banning, opt 1'''
         if use_message.reactions[0].count > 1:
+            avoid_gaucho_member.append(member.id)
             await message.delete()
             #need to send an embed message of a summary of the ban.
             embed = discord.Embed(title = '**TICKET EVENT BAN: SUMMARY**', description = f'The following ticket was sent in by: {ctx.author.mention}\n\
@@ -306,6 +310,7 @@ async def ticket(ctx, member : discord.Member, * , reason):
             
             await ban_channel.set_permissions(member, overwrite = None)
             await welcome_channel.set_permissions(member, overwrite = None)
+            avoid_gaucho_member.remove(member.id)
             return
 
         '''for warning, opt 2'''
@@ -1187,6 +1192,7 @@ async def clear_role(ctx, role : discord.Role):
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
 async def ban(ctx, member : discord.Member , *, length):
+    avoid_gaucho_member.append(member.id)
     if 'hr' in length or 'hour' in length or 'hours' in length:
         hour = int(re.split('hr|hour|hours', length)[0])
         time = hour * 3600
@@ -1236,6 +1242,7 @@ async def ban(ctx, member : discord.Member , *, length):
     
     await ban_channel.set_permissions(member, overwrite = None)
     await welcome_channel.set_permissions(member, overwrite = None)
+    avoid_gaucho_member.remove(member.id)
 
 # Help Command for all Moderators, list of usable commands
 ######################################@client.command()
@@ -1444,11 +1451,35 @@ async def non_gaucho(ctx):
 
 @client.event
 async def on_member_join(user):
-    await user.send('Welcome to UCSB Physics Server, please fill out this form to gain access')
+    image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
+    rules_channel = client.get_channel(775492454338002994)
+    manual_channel = client.get_channel(760907945646751804)
+    embed = discord.Embed(colour = 0X003560)
+    embed.add_field(name = 'Welcome!', value = f'Thank you {user.mention} for joining the UCSB Physics Server! Please read and follow our {rules_channel.mention} while being apart of this community.\n\n\
+        If you are a **current UCSB student** or apart of the **UCSB Faculty** please fill out this [form](https://forms.gle/jAsx4TKBeERPQT6K9) to gain access \n\n\
+            If you are a **prospective student** and wish to take a small view at UCSB Physics then please fill out this [form](https://forms.gle/bd77bphN1qbVWw7x8)')
+    embed.add_field(name = 'New to Discord?', value = f"If you are new to Discord and want to find out more about discord's functionalty please head over to {manual_channel.mention}.")
+    embed.set_thumbnail(url = image)
+    await user.send(embed = embed)
+
+@client.event
+async def on_member_update(before, after):
+    guild = client.get_guild(guild_id)
+    gaucho_role = guild.get_role(gaucho_id)
+    if gaucho_role not in before.roles and gaucho_role in after.roles and before.id not in avoid_gaucho_member:
+        image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
+        embed = discord.Embed(colour = 0X003560)
+        rules_channel = client.get_channel(775492454338002994)
+        manual_channel = client.get_channel(760907945646751804)
+        embed.add_field(name = 'Thank you!', value = f'Thank you {before.mention} for filling out our verification form! You should now have access to our Server, \
+            if you have any questions feel free to reach out to any of our moderators. \n\nIf you havent already please read and follow our {rules_channel.mention} while being apart of this community.')
+        embed.add_field(name = 'New to Discord?', value = f"If you are new to Discord and want to find out more about discord's functionalty please head over to {manual_channel.mention}.")
+        embed.set_thumbnail(url = image)
+        await before.send(embed = embed)
 
 @client.event
 async def on_member_remove(user):
     channel = client.get_channel(bot_command_channel_id)
-    await channel.send(f'Oh no! Looks like {user} has left the server.')
+    await channel.send(f'Oh no! Looks like {user} has left the server. Please remove this user from the verification list.')
 
 client.run('TOKEN')
