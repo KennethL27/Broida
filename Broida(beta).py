@@ -1508,4 +1508,23 @@ async def add_meeting(ctx, *, notes):
     data["meeting-notes"].append({"date" : str(ctx.message.created_at.now().date()), f"note-entry" : note_message})
     write_json(data, "Bot_Info.json")
 
+# Staff Command: Allows staff to view previous staff meeting notes
+######################################
+@client.command()
+async def meeting_notes(ctx, date = None):
+    with open("Bot_Info.json") as bot_info_json:
+        data = json.load(bot_info_json)
+    
+    if date == None:
+        embed = discord.Embed(colour = 0x008000, description = "To view an entire meeting note please use `.meeting_notes 'copy and paste a valid date'`")
+        for data_date in data["meeting-notes"]:
+            embed.add_field(name = data_date["date"], value = f'{data_date["note-entry"][:20]}...')
+        await ctx.send(embed = embed)
+    else:
+        for data_date in data["meeting-notes"]:
+            embed = discord.Embed(colour = 0x008000)
+            if data_date["date"].replace('-', '') == date.replace('/', '').replace('-',''):
+                embed.add_field(name = data_date["date"], value = data_date["note-entry"])
+                await ctx.send(embed = embed)
+
 client.run('TOKEN')
