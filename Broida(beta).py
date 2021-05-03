@@ -1449,6 +1449,8 @@ async def non_gaucho(ctx):
 
     print(non_gaucho_members)
 
+# Event trigger: welcomes a new user and encourages to fill out their corresponding form
+######################################
 @client.event
 async def on_member_join(user):
     image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
@@ -1462,6 +1464,8 @@ async def on_member_join(user):
     embed.set_thumbnail(url = image)
     await user.send(embed = embed)
 
+# Event trigger: thanks a new verified user and notifies them of their status 
+######################################
 @client.event
 async def on_member_update(before, after):
     guild = client.get_guild(guild_id)
@@ -1477,6 +1481,8 @@ async def on_member_update(before, after):
         embed.set_thumbnail(url = image)
         await before.send(embed = embed)
 
+# Event trigger: Notifies staff to remove the user that left from the spreadsheet
+######################################
 @client.event
 async def on_member_remove(user):
     channel = client.get_channel(bot_command_channel_id)
