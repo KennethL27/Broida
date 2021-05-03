@@ -772,7 +772,7 @@ async def on_raw_message_delete(payload):
     status = False
 
     try:
-        if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous') or message.content.startswith('.pexam') or message.content.startswith('.meeting_notes'):
+        if message.content.startswith('.a ') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous') or message.content.startswith('.pexam') or message.content.startswith('.meeting_notes'):
             return
 
         from_zone = tz.tzutc()
@@ -1317,6 +1317,33 @@ async def winner(ctx, channel : discord.TextChannel):
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
 async def add_event(ctx, event_name : str, event_time : str, mention1 = None, mention2 = None, mention3 = None, mention4 = None, mention5 = None):
+    if ctx.channel.id != staff_channel_id:
+        await ctx.message.delete()
+        await ctx.send(f'Sorry please do not use this channel for creating events. Please use {client.get_channel(staff_channel_id).mention}', delete_after = 5)
+        return
+    if mention1 == None:
+        mention1 = 'Null'
+    await ctx.reply('*You have 10 minutes to make any edits before the event is submitted*')
+    original_message = ctx.message
+    release = ctx.message.created_at.now() + datetime.timedelta(0,600) # 600secs = 10 minutes
+    while datetime.datetime.now() < release:
+        await asyncio.sleep(1)
+        edit_message_time = original_message.edited_at
+        if not edit_message_time:
+            pass
+        else:
+            list_of_messages = ctx.message.content.split('"')
+            event_time = list_of_messages[3]
+            event_name = list_of_messages[1]
+            list_of_mentions = list_of_messages[4].split()
+            try:
+                mention1 = list_of_mentions[0]
+                mention2 = list_of_mentions[1]
+                mention3 = list_of_mentions[2]
+                mention4 = list_of_mentions[3]
+                mention5 = list_of_mentions[4]
+            except:
+                pass
     if mention1 == None:
         mention1 = 'Null'
     with open('Bot_Info.json') as bot_info_json:
@@ -1528,7 +1555,7 @@ async def meeting_notes(ctx, date = None):
         await ctx.message.delete()
         await ctx.send(f'Sorry please do not use this channel for viewing meeting notes. Please use {client.get_channel(staff_channel_id).mention}', delete_after = 5)
         return
-        
+
     with open("Bot_Info.json") as bot_info_json:
         data = json.load(bot_info_json)
     
