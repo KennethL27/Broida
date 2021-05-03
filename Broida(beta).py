@@ -1488,4 +1488,24 @@ async def on_member_remove(user):
     channel = client.get_channel(bot_command_channel_id)
     await channel.send(f'Oh no! Looks like {user} has left the server. Please remove this user from the verification list.')
 
+# Staff Command: Allows staff to keep track of staff meeting notes
+######################################
+@client.command()
+async def add_meeting(ctx, *, notes):
+    await ctx.reply('*You have 10 minutes to make any edits before the notes are submitted*')
+    original_message = ctx.message
+    release = ctx.message.created_at.now() + datetime.timedelta(0,6) # 600secs = 10 minutes
+    while datetime.datetime.now() < release:
+        await asyncio.sleep(1)
+        edit_message_time = original_message.edited_at
+        if edit_message_time:
+            note_message = original_message.content
+            note_message.replace('.add_meeting ', '')
+        else:
+            note_message = notes
+    with open("Bot_Info.json") as bot_info_json:
+        data = json.load(bot_info_json)
+    data["meeting-notes"].append({"date" : str(ctx.message.created_at.now().date()), f"note-entry" : note_message})
+    write_json(data, "Bot_Info.json")
+
 client.run('TOKEN')
