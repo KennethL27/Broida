@@ -771,7 +771,7 @@ async def on_raw_message_delete(payload):
     status = False
 
     try:
-        if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous'):
+        if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous') or message.content.startswith('.pexam'):
             return
 
         from_zone = tz.tzutc()
@@ -820,11 +820,16 @@ async def on_raw_message_delete(payload):
             if status == False:
                 await message_log_channel.send('A deleted message was out of scope. Sorry about that ')
 
-# Exam Command 2.0a, Moderators able to close a course channel from time1 to time2.
+# Exam Command 2.0, Moderators able to close a course channel from time1 to time2.
 ######################################
 @client.command()
 # async def pexam(ctx, channel : discord.TextChannel, role : discord.Role, space, date, time1, to, time2):
-async def pexam(ctx, channel : discord.TextChannel, role : discord.Role, start_date : str, end_date : str):
+async def exam(ctx, channel : discord.TextChannel, role : discord.Role, start_date : str, end_date : str):
+    if ctx.channel.id != bot_command_channel_id:
+        await ctx.message.delete()
+        message = await ctx.send('Sorry please do not use this channel for creating exam times.', delete_after = 5)
+        return
+
     with open('Bot_Info.json') as bot_info_json:
         data = json.load(bot_info_json)
         data["exam"].append({"start-date" : start_date, "end-date": end_date, "course-channel": channel.id, "course-role" : role.id})
@@ -927,6 +932,7 @@ async def pexam(ctx, channel : discord.TextChannel, role : discord.Role, start_d
 
 # Exam Command 1.0a, Moderators able to close a course channel from time1 to time2.
 ######################################
+'''
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
 async def exam(ctx, channel_name, course, course_number, space, date, time1, to, time2): 
@@ -1137,7 +1143,7 @@ async def examL(ctx, channel_name, course, course_number, space, date1, time1, t
 # Moderation Mute Feature
 # Currently Discontinued 
 ######################################
-'''
+
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
 async def mute(ctx, member : discord.Member, *, length=None): #default length is 1 hr
