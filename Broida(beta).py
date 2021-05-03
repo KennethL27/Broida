@@ -52,6 +52,7 @@ rant_id = 771845526903586847
 anonymous_id = 787685941794832405
 ban_id = 794092839280967691 
 welcome_id = 775492454338002994 
+staff_channel_id = 804860036207738890
 
 # Boolean to trigger message delete function
 ######################################
@@ -771,7 +772,7 @@ async def on_raw_message_delete(payload):
     status = False
 
     try:
-        if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous') or message.content.startswith('.pexam'):
+        if message.content.startswith('.a') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous') or message.content.startswith('.pexam') or message.content.startswith('.meeting_notes'):
             return
 
         from_zone = tz.tzutc()
@@ -827,7 +828,7 @@ async def on_raw_message_delete(payload):
 async def exam(ctx, channel : discord.TextChannel, role : discord.Role, start_date : str, end_date : str):
     if ctx.channel.id != bot_command_channel_id:
         await ctx.message.delete()
-        message = await ctx.send('Sorry please do not use this channel for creating exam times.', delete_after = 5)
+        message = await ctx.send('Sorry please do not use this channel for creating exam times. Please use {client.get_channel(bot_command_channel_id).mention}', delete_after = 5)
         return
 
     with open('Bot_Info.json') as bot_info_json:
@@ -1498,6 +1499,11 @@ async def on_member_remove(user):
 ######################################
 @client.command()
 async def add_meeting(ctx, *, notes):
+    if ctx.channel.id != staff_channel_id:
+        await ctx.message.delete()
+        await ctx.send(f'Sorry please do not use this channel for creating meeting notes. Please use {client.get_channel(staff_channel_id).mention}', delete_after = 5)
+        return
+
     await ctx.reply('*You have 10 minutes to make any edits before the notes are submitted*')
     original_message = ctx.message
     release = ctx.message.created_at.now() + datetime.timedelta(0,6) # 600secs = 10 minutes
@@ -1518,6 +1524,11 @@ async def add_meeting(ctx, *, notes):
 ######################################
 @client.command()
 async def meeting_notes(ctx, date = None):
+    if ctx.channel.id != staff_channel_id:
+        await ctx.message.delete()
+        await ctx.send(f'Sorry please do not use this channel for viewing meeting notes. Please use {client.get_channel(staff_channel_id).mention}', delete_after = 5)
+        return
+        
     with open("Bot_Info.json") as bot_info_json:
         data = json.load(bot_info_json)
     
