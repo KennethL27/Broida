@@ -1,4 +1,10 @@
 {
+    "meeting-notes": [
+        {
+            "date": "2021-05-02",
+            "note-entry": "Example of a meeting note entry"
+        }
+    ],
     "exam": [
         {
             "start-date": "5-1-2021 11:00am",
@@ -10,7 +16,8 @@
     "event": [
         {
             "date": "4-15-2021 8:30pm",
-            "event-name": "Study Grind"
+            "event-name": "Study Grind",
+            "mentions": "Null"
         }
     ]
 }
