@@ -1,5 +1,6 @@
 import discord, json, time
 from discord.ext import commands
+from broida_token import token_pass
 
 client = commands.Bot(command_prefix = '.')
 
@@ -36,4 +37,4 @@ if __name__ == '__main__':
         client.load_extension(f'cogs.{cog}')
         print(f'Loaded {cog}')
 
-client.run('TOKEN')
+client.run(token_pass)
