@@ -1,0 +1,91 @@
+{
+    "meeting-notes": [
+        {
+            "date": "2021-05-02",
+            "note-entry": "Notes Here"
+        },
+        {
+            "date": "2021-05-02",
+            "note-entry": "Notes about the meeting, the first entry"
+        },
+        {
+            "date": "2021-05-02",
+            "note-entry": "Notes about the meeting, the second entry"
+        },
+        {
+            "date": "2021-05-02",
+            "note-entry": ".add_meeting Some Meetings Notes about the stuff we said during today meeting. Here is the edited message"
+        },
+        {
+            "date": "2021-05-02",
+            "note-entry": "**Updated Policy on Pings for Clubs**\n1. For meetings that meet regularly (general meetings, journal club, etc), please limit your pings to @SPS Member or @UDIP Member and place those pings inside your club's general chat. As long as you follow those limitations you are free to ping as much as you want. \n2. For big events that are not hosted weekly (Latex Workshop, Industry Panel), please ping <@&785778216819490836> in #clubs-announcements but limit it to two pings per event. The first ping will announce the event and give all the details. The second ping would be a reminder the day before the event.\nIf you have any questions or concerns about this new policy please contact discord staff."
+        },
+        {
+            "date": "2021-05-03",
+            "note-entry": "In this session we have created new positions\n* we have also made a post reaching out to new students that recently got admitted"
+        }
+    ],
+    "exam": [],
+    "event": [
+        {
+            "date": "5-4-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "5-6-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "5-11-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "5-13-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "5-18-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "5-20-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "5-25-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "5-27-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "6-1-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "6-3-2021 8:30pm",
+            "event-name": "Study Grind",
+            "mentions": "Null"
+        },
+        {
+            "date": "5/7/2021 9:26pm",
+            "event-name": "New Event Test",
+            "mentions": "<@!411631919370076170>, <@&759317768364752966>, None, None, None"
+        },
+        {
+            "date": "5/9/2021 9:26pm",
+            "event-name": "New Event Test",
+            "mentions": "<@!411631919370076170>, <@&759317768364752966>, None, None, None"
+        }
+    ]
+}
