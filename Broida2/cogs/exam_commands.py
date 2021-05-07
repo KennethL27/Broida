@@ -152,3 +152,4 @@ class exam_commands(commands.Cog):
             await ctx.send(embed = embed)
 def setup(bot):
     bot.add_cog(exam_commands(bot))
+    print("Exam Commands Online\n")

@@ -16,11 +16,16 @@ async def on_ready():
 
 @client.command()
 async def update(ctx):
+    print()
+    print()
+    print()
+    print('______________________________________________________')
     cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
     for cog in cog_fields:
-        print(f'Reloading {cog}')
+        print(f'Reloading {cog}\n')
         client.reload_extension(f'cogs.{cog}')
         print(f'Loaded {cog}\n')
+        print('_______________________________________')
 
 @client.command()
 async def uptime(ctx):
@@ -39,8 +44,9 @@ async def uptime(ctx):
 if __name__ == '__main__':
     cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
     for cog in cog_fields:
-        print(f'Loading {cog}...')
+        print(f'Loading {cog}...\n')
         client.load_extension(f'cogs.{cog}')
         print(f'Loaded {cog}\n')
+        print('_______________________________________')
 
 client.run(token_pass)

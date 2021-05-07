@@ -73,3 +73,4 @@ class user_static_commands(commands.Cog):
 
 def setup(bot):
     bot.add_cog(user_static_commands(bot))
+    print("Users' Commands Online\n")
