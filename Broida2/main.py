@@ -2,7 +2,15 @@ import discord, json, time
 from discord.ext import commands
 from broida_token import token_pass
 
-client = commands.Bot(command_prefix = '.')
+intents = discord.Intents.default()
+intents.members = True
+intents.messages = True
+intents.emojis = True
+intents.reactions = True
+intents.guild_reactions = True
+
+client = commands.Bot(command_prefix = '.', fetch_online_members = True, intents = intents)
+# client.remove_command('help')
 
 def open_json(file_name):
     with open (file_name) as file:
