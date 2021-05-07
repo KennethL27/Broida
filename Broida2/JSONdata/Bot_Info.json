@@ -1,4 +1,5 @@
 {
+    "cogs": ["user_static_commands", "exam_commands"],
     "meeting-notes": [
         {
             "date": "2021-05-02",
@@ -25,7 +26,20 @@
             "note-entry": "In this session we have created new positions\n* we have also made a post reaching out to new students that recently got admitted"
         }
     ],
-    "exam": [],
+    "exam": [
+        {
+            "start-date": "5/10/2021 10:41pm",
+            "end-date": "5/10/2021 10:43pm",
+            "course-channel": 777012572423585803,
+            "course-role": 777124261902155776
+        },
+        {
+            "start-date": "5/9/2021 10:41pm",
+            "end-date": "5/9/2021 10:43pm",
+            "course-channel": 777012512377012234,
+            "course-role": 777124177269882902
+        }
+    ],
     "event": [
         {
             "date": "5-4-2021 8:30pm",

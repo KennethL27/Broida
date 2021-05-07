@@ -4,17 +4,23 @@ from broida_token import token_pass
 
 client = commands.Bot(command_prefix = '.')
 
+def open_json(file_name):
+    with open (file_name) as file:
+        return json.load(file)
+
 @client.event
 async def on_ready():
     bot_description = discord.Game('missing the crowds | .help')
     await client.change_presence(activity = bot_description)
+    print("Broida's main center is currently online.")
 
 @client.command()
 async def update(ctx):
+    cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
     for cog in cog_fields:
         print(f'Reloading {cog}')
         client.reload_extension(f'cogs.{cog}')
-        print(f'Loaded {cog}')
+        print(f'Loaded {cog}\n')
 
 @client.command()
 async def uptime(ctx):
@@ -30,11 +36,11 @@ async def uptime(ctx):
     message = await ctx.send(f'**UPTIME**: Days: {int(time_days)}, Hours: {int(time_hours)}, Minutes: {int(time_minutes)}, Seconds: {round(time_seconds,2)}')
     await message.delete(delay = 5)
 
-cog_fields = ['user_static_commands']
 if __name__ == '__main__':
+    cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
     for cog in cog_fields:
         print(f'Loading {cog}...')
         client.load_extension(f'cogs.{cog}')
-        print(f'Loaded {cog}')
+        print(f'Loaded {cog}\n')
 
 client.run(token_pass)
