@@ -12,6 +12,11 @@ intents.guild_reactions = True
 client = commands.Bot(command_prefix = '.', fetch_online_members = True, intents = intents)
 # client.remove_command('help')
 
+founder_id = 759317762769420310
+admin_id = 777124216876957696
+treasurer_id = 759317768364752966
+mod_id = 777124177269882902
+
 def open_json(file_name):
     with open (file_name) as file:
         return json.load(file)
@@ -23,17 +28,35 @@ async def on_ready():
     print("Broida's main center is currently online.")
 
 @client.command()
-async def update(ctx):
-    print()
-    print()
-    print()
-    print('______________________________________________________')
-    cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
-    for cog in cog_fields:
-        print(f'Reloading {cog}\n')
-        client.reload_extension(f'cogs.{cog}')
-        print(f'Loaded {cog}\n')
-        print('_______________________________________')
+@commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
+async def update(ctx, force = None):
+    if not force:
+        print()
+        print()
+        print()
+        print('______________________________________________________')
+        cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
+        for cog in cog_fields:
+            print(f'Reloading {cog}\n')
+            client.reload_extension(f'cogs.{cog}')
+            print(f'Loaded {cog}\n')
+            print('_______________________________________')
+    # a force update will allow new cogs to be introduced without restarting main.py
+    else:
+        print()
+        print()
+        print()
+        print('______________________________________________________')
+        cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
+        for cog in cog_fields:
+            print(f'Reloading {cog}\n')
+            try:
+                client.unload_extension(f'cogs.{cog}')
+                client.load_extension(f'cogs.{cog}')
+            except:
+                client.load_extension(f'cogs.{cog}')
+            print(f'Loaded {cog}\n')
+            print('_______________________________________')
 
 @client.command()
 async def uptime(ctx):

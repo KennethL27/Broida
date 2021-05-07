@@ -2,7 +2,8 @@
     "cogs": [
         "user_static_commands",
         "exam_commands",
-        "event_commands"
+        "event_commands",
+        "event_cogs"
     ],
     "meeting-notes": [
         {
