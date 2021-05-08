@@ -6,7 +6,8 @@
         "event_cogs",
         "ticket_commands",
         "anonymous_commands",
-        "staff_commands"
+        "staff_commands",
+        "help_commands"
     ],
     "meeting-notes": [
         {
