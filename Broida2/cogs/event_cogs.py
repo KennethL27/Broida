@@ -47,7 +47,7 @@ class event_cogs(commands.Cog):
 
         except:
             message_id = payload.message_id
-            data = await self.open_json('Update_Message_Log.json')
+            data = await self.open_json('JSONdata/Update_Message_Log.json')
             for json_message in data['messages']:
                 if json_message['id'] == message_id:
                     author = json_message['author']
@@ -87,11 +87,11 @@ class event_cogs(commands.Cog):
             user_name = message.author
             channel = message.channel
             user_message = message.content
-            data = await self.open_json("Update_Message_Log.json")
+            data = await self.open_json("JSONdata/Update_Message_Log.json")
             message_log = data['messages']
             new_entry = {"id": message_id, "author": user_name.mention, "channel": channel.mention, "created_at": convert_zone, "message": user_message}
             message_log.append(new_entry)
-            await self.write_json(data, "Update_Message_Log.json")
+            await self.write_json(data, "JSONdata/Update_Message_Log.json")
 
     @commands.Cog.listener()
     async def on_member_join(self, user):
