@@ -74,10 +74,11 @@ class exam_commands(commands.Cog):
             index = index + 1
 
     @commands.command()
+    @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def exam(self, ctx, channel : discord.TextChannel, role : discord.Role, start_date : str, end_date : str):
         if ctx.channel.id != variables.bot_command_channel_id:
             await ctx.message.delete()
-            message = await ctx.send('Sorry please do not use this channel for creating exam times. Please use {client.get_channel(bot_command_channel_id).mention}', delete_after = 5)
+            await ctx.send(f'Sorry please do not use this channel for creating exam times. Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
             return
 
         data = await self.open_json('JSONdata/Bot_Info.json')
