@@ -56,6 +56,10 @@ class staff_commands(commands.Cog):
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id)
     async def clear_role(self, ctx, role : discord.Role):
+        if ctx.channel.id != variables.bot_command_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel to clear roles. Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
+            return
         guild = self.bot.get_guild(variables.guild_id)
         gaucho_role = guild.get_role(variables.gaucho_id)
         graduate_role = guild.get_role(variables.graduate_id)
@@ -75,6 +79,10 @@ class staff_commands(commands.Cog):
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def ban(self, ctx, member : discord.Member , *, length):
         variables.avoid_gaucho_member.append(member.id)
+        if ctx.channel.id != variables.bot_command_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
+            return
         if 'hr' in length or 'hour' in length or 'hours' in length:
             hour = int(re.split('hr|hour|hours', length)[0])
             time = hour * 3600
