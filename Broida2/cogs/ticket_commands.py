@@ -7,7 +7,7 @@ class ticket_commands(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases = ['tic'])
-    async def ticket1(self, ctx, member : discord.Member, * , reason):
+    async def ticket(self, ctx, member : discord.Member, * , reason):
         #for DMs, to mention the user use their discord username (not nickname) along with their discriminator. ie PhysicsLegends#6877
         guild = self.bot.get_guild(variables.guild_id)
         if ctx.channel in guild.text_channels:
