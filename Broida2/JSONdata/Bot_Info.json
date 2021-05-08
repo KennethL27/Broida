@@ -3,7 +3,10 @@
         "user_static_commands",
         "exam_commands",
         "event_commands",
-        "event_cogs"
+        "event_cogs",
+        "ticket_commands",
+        "anonymous_commands",
+        "staff_commands"
     ],
     "meeting-notes": [
         {
@@ -85,11 +88,6 @@
             "date": "6-3-2021 8:30pm",
             "event-name": "Study Grind",
             "mentions": "Null"
-        },
-        {
-            "date": "5/7/2021 9:26pm",
-            "event-name": "New Event Test",
-            "mentions": "<@!411631919370076170>, <@&759317768364752966>, None, None, None"
         },
         {
             "date": "5/9/2021 9:26pm",
