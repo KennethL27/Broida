@@ -71,6 +71,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def staff(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Commands for staff members', description = 'These commands do not require extra formatting',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -91,6 +96,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def announcement(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Announcement Command', description = 'Format: .announcement "MM/DD/YYYY HH:MMam/pm" `Announcement`',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -105,6 +115,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def exam(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Exam Command', description = 'Format: .exam `#course-channel @course-role` "MM/DD/YYYY HH:MMam/pm" "MM/DD/YYYY HH:MMam/pm"',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -118,6 +133,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def ban(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Ban Command', description = 'Format: .ban `@member` length',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -130,6 +150,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def anonymous_finder(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Anonymous Finder Command', description = 'Format: .afind `message_ID`',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -144,6 +169,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def clear_role(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Clear Role Command', description = 'Format: .clear_role `@role`',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -157,6 +187,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def winner(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Winner Command', description = 'Format: .winner `#channel`',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -170,6 +205,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def update(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Update Command', description = 'Format: .update force/prepare',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -184,6 +224,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def events(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Events Commands', description = 'There are 2 event commands: .events and .add_event',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
@@ -198,6 +243,11 @@ class help_commands(commands.Cog):
     @help.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def meeting_notes(self, ctx):
+        if ctx.channel.id != variables.bot_command_channel_id or ctx.channel.id != variables.staff_channel_id:
+            await ctx.message.delete()
+            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
+                            delete_after = 5)
+            return
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
         embed = discord.Embed(title = 'Meeting Notes Commands', description = 'There are 2 event commands: .meeting_notes and .add_meeting',
                                 colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
