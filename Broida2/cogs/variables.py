@@ -37,7 +37,6 @@ list_of_commands = ['.physics', '.fiziks', '.uptime', '.dadjoke', '.update']
 
 user_list = []
 generated_user = []
-avoid_gaucho_member = []
 
 update_status = False
 

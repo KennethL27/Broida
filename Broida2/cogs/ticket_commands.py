@@ -1,10 +1,18 @@
 from discord.ext import commands
-import datetime, discord, time, asyncio
+import datetime, discord, time, asyncio, json
 import cogs.variables as variables
 
 class ticket_commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    async def write_json(self, data, file_name):
+        with open (file_name, 'w') as file:
+            json.dump(data, file, indent = 4)
+
+    async def open_json(self, file_name):
+        with open (file_name) as file:
+            return json.load(file)
 
     @commands.command(aliases = ['tic'])
     async def ticket(self, ctx, member : discord.Member, * , reason):
@@ -33,7 +41,9 @@ class ticket_commands(commands.Cog):
 
             '''for banning, opt 1'''
             if use_message.reactions[0].count > 1:
-                variables.avoid_gaucho_member.append(member.id)
+                data = await self.open_json("JSONdata/Bot_Info.json")
+                data["avoid-gaucho-member"].append(member.id)
+                await self.write_json(data, "JSONdata/Bot_Info.json")
                 await message.delete()
                 #need to send an embed message of a summary of the ban.
                 embed = discord.Embed(title = '**TICKET EVENT BAN: SUMMARY**', description = f'The following ticket was sent in by: {ctx.author.mention}\n\
@@ -83,7 +93,9 @@ class ticket_commands(commands.Cog):
                 
                 await ban_channel.set_permissions(member, overwrite = None)
                 await welcome_channel.set_permissions(member, overwrite = None)
-                variables.avoid_gaucho_member.remove(member.id)
+                data = await self.open_json("JSONdata/Bot_Info.json")
+                data["avoid-gaucho-member"].remove(member.id)
+                await self.write_json(data, "JSONdata/Bot_Info.json")
                 return
 
             '''for warning, opt 2'''

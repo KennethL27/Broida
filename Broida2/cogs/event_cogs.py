@@ -110,7 +110,9 @@ class event_cogs(commands.Cog):
     async def on_member_update(self, before, after):
         guild = self.bot.get_guild(variables.guild_id)
         gaucho_role = guild.get_role(variables.gaucho_id)
-        if gaucho_role not in before.roles and gaucho_role in after.roles and before.id not in variables.avoid_gaucho_member: # going to need to have avoid_gaucho_member info in bot_info.json
+        data = await self.open_json("JSONdata/Bot_Info.json")
+        avoid_gaucho_member = data["avoid-gaucho-member"]
+        if gaucho_role not in before.roles and gaucho_role in after.roles and before.id not in avoid_gaucho_member: # going to need to have avoid_gaucho_member info in bot_info.json
             image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
             embed = discord.Embed(colour = 0X003560)
             rules_channel = self.bot.get_channel(775492454338002994)

@@ -78,7 +78,9 @@ class staff_commands(commands.Cog):
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def ban(self, ctx, member : discord.Member , *, length):
-        variables.avoid_gaucho_member.append(member.id)
+        data = await self.open_json("JSONdata/Bot_Info.json")
+        data["avoid-gaucho-member"].append(member.id)
+        await self.write_json(data, "JSONdata/Bot_Info.json")
         if ctx.channel.id != variables.bot_command_channel_id:
             await ctx.message.delete()
             await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
@@ -132,7 +134,9 @@ class staff_commands(commands.Cog):
         
         await ban_channel.set_permissions(member, overwrite = None)
         await welcome_channel.set_permissions(member, overwrite = None)
-        variables.avoid_gaucho_member.remove(member.id)
+        data = await self.open_json("JSONdata/Bot_Info.json")
+        data["avoid-gaucho-member"].remove(member.id)
+        await self.write_json(data, "JSONdata/Bot_Info.json")
 
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)

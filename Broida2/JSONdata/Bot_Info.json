@@ -95,5 +95,6 @@
             "event-name": "New Event Test",
             "mentions": "<@!411631919370076170>, <@&759317768364752966>, None, None, None"
         }
-    ]
+    ],
+    "avoid-gaucho-member": []
 }
