@@ -70,7 +70,6 @@ class exam_commands(commands.Cog):
         data = await self.open_json('JSONdata/Bot_Info.json')
         index = 0
         for json_exam in data['exam']:
-            # error on the line below, the next line must complete one by one instead of call the function and move on. 
             asyncio.get_event_loop().create_task(self.exam_execution(json_exam["course-channel"], json_exam["course-role"], json_exam["start-date"], json_exam["end-date"], index))
             index = index + 1
 
