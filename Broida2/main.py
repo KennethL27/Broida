@@ -10,7 +10,7 @@ intents.reactions = True
 intents.guild_reactions = True
 
 client = commands.Bot(command_prefix = '.', fetch_online_members = True, intents = intents)
-# client.remove_command('help')
+client.remove_command('help')
 
 founder_id = 759317762769420310
 admin_id = 777124216876957696
