@@ -35,9 +35,4 @@ bot_list_id = [204255221017214977]
 
 list_of_commands = ['.physics', '.fiziks', '.uptime', '.dadjoke', '.update']
 
-user_list = []
-generated_user = []
-
 update_status = False
-
-delete_counter = 0

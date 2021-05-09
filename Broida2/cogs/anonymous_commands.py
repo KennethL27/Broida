@@ -5,6 +5,9 @@ import cogs.variables as variables
 class anonymous_commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.delete_counter = 0
+        self.user_list = []
+        self.generated_user = []
 
     async def write_json(self, data, file_name):
         with open (file_name, 'w') as file:
@@ -45,15 +48,15 @@ class anonymous_commands(commands.Cog):
         
         user_message = user_message.replace('@everyone', '@ everyone').replace('@here', '@ here')
 
-        if user_name not in variables.user_list:
+        if user_name not in self.user_list:
             user = random.randint(0,9999)
-            variables.user_list.append(user_name)
-            variables.generated_user.append(f'User{user}')
+            self.user_list.append(user_name)
+            self.generated_user.append(f'User{user}')
 
             if not(isinstance(ctx.channel, discord.channel.DMChannel)):
                 await ctx.message.delete()
             anonymous_message = await channel.send(f'User{user}: {user_message}')
-            delete_counter = delete_counter + 1
+            self.delete_counter = self.delete_counter + 1
             anonymous_message_id = anonymous_message.id
             
             data = await self.open_json("JSONdata/Anonymous_Log.json")
@@ -62,14 +65,14 @@ class anonymous_commands(commands.Cog):
             message_log.append(new_entry)
             await self.write_json(data, "JSONdata/Anonymous_Log.json")
 
-        elif user_name in variables.user_list:
-            for i in variables.user_list:
+        elif user_name in self.user_list:
+            for i in self.user_list:
                 if i == user_name:
 
                     if not(isinstance(ctx.channel, discord.channel.DMChannel)):
                         await ctx.message.delete()
-                    anonymous_message = await channel.send(f'{variables.generated_user[k]}: {user_message}')
-                    delete_counter = delete_counter + 1
+                    anonymous_message = await channel.send(f'{self.generated_user[k]}: {user_message}')
+                    self.delete_counter = self.delete_counter + 1
                     anonymous_message_id = anonymous_message.id
 
                     data = await self.open_json("JSONdata/Anonymous_Log.json")
@@ -79,10 +82,10 @@ class anonymous_commands(commands.Cog):
                     await self.write_json(data, "JSONdata/Anonymous_Log.json")
 
                 k = k + 1
-        if delete_counter == 3:
-            variables.user_list.clear()
-            variables.generated_user.clear()
-            delete_counter = 0
+        if self.delete_counter == 30:
+            self.user_list.clear()
+            self.generated_user.clear()
+            self.delete_counter = 0
 
     @commands.command(aliases=['afind'])
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
