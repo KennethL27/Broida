@@ -1,5 +1,6 @@
 from discord.ext import commands
 import json, datetime, asyncio, discord
+from threading import Thread
 import cogs.variables as variables
 
 class exam_commands(commands.Cog):
@@ -70,7 +71,7 @@ class exam_commands(commands.Cog):
         index = 0
         for json_exam in data['exam']:
             # error on the line below, the next line must complete one by one instead of call the function and move on. 
-            await self.exam_execution(json_exam["course-channel"], json_exam["course-role"], json_exam["start-date"], json_exam["end-date"], index)
+            asyncio.get_event_loop().create_task(self.exam_execution(json_exam["course-channel"], json_exam["course-role"], json_exam["start-date"], json_exam["end-date"], index))
             index = index + 1
 
     @commands.command()
