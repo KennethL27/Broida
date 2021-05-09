@@ -17,7 +17,25 @@ ___
 </tr>
 </table>
 
-### Features
+___
+
+## Features
+
+### Broida Alpha 2.0.0
+
+In this update [Broida(alpha).py](https://github.com/KennethL27/Broida/blob/master/Broida(alpha).py) and [Broida(beta).py](https://github.com/KennethL27/Broida/blob/master/Broida(beta).py) will be discontinued and replaced with [Broida2](https://github.com/KennethL27/Broida/tree/master/Broida2). Inside Broida2, the contents of the previous Broida will now be divided up and organized. This will be easier for future developers to maintain and update any of the code. 
+<br/><br/>
+There are 3 main compents within Broida 2: [main.py](https://github.com/KennethL27/Broida/blob/master/Broida2/main.py), [cogs](https://github.com/KennethL27/Broida/tree/master/Broida2/cogs), and [json files](https://github.com/KennethL27/Broida/tree/master/Broida2/JSONdata).
+[Broida2](https://github.com/KennethL27/Broida/tree/master/Broida2)
+The head program that will handle and execute all other sub-codes will be [main.py](https://github.com/KennethL27/Broida/blob/master/Broida2/main.py). This program will provide all the correct settings, start up all subcommands, and provide a new update command. This new update command is going to be very usuful for providing quick and easy updates made to any part of Broida2. There are 3 types of updates: `.update`, `.update force`, and `.update prepare`. 
+* `.update`: This is a simple update that will reload all subcommands; for example, if a small change like fixing a typo in help_commmands.py is made then `.update` will be able to refresh all the commands without restarting the Broida. This allows for Broida to essientially stay up without losing any information.  
+* `.update force`: This update will allow any new subcommands to be created. For the new subcommand to acknowledge by Broida it must be add to [Broida's main json file](https://github.com/KennethL27/Broida/blob/master/Broida2/JSONdata/Bot_Info.json). This will also reload all the other subcommands.
+* `.update prepare`: The previous version of `.update` has now taken the look of `.update prepare`. This type of update still presents itself useful when updating Broida's [main.py](https://github.com/KennethL27/Broida/tree/master/Broida2) or making any changes within subcommands' `def __init__`. This update will start gathering information for 1 day in advance or until the update goes live.
+ <!--  --> 
+<br/><br/>
+The second main component of Broida2 are [Cogs](https://github.com/KennethL27/Broida/tree/master/Broida2/cogs). These Cogs are the subcommands that the previous Broida was divided into. There are 7 subcommand categories: [Anonymous](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/anonymous_commands.py), [backend events](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/event_cogs.py), [Events](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/event_commands.py), [Exams](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/exam_commands.py), [Help](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/help_commands.py), [Staff](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/staff_commands.py), [Ticket](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/ticket_commands.py), and [User](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/user_static_commands.py). There is also a [Variables](https://github.com/KennethL27/Broida/blob/master/Broida2/cogs/variables.py) program that contains the IDs for roles, channels, and important information. The format for Cogs is different from the previous of verison, but provides a more useful enviornment.
+<br/><br/>
+Lastly there are [json files](https://github.com/KennethL27/Broida/tree/master/Broida2/JSONdata) will allow subcommands to get information from one another. Otherwise these json files remained the same as the previous version of Broida.
 
 #### Alpha
 
