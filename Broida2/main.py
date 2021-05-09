@@ -1,4 +1,4 @@
-import discord, json, time
+import discord, json, time, asyncio
 from discord.ext import commands
 from broida_token import token_pass
 
@@ -17,9 +17,15 @@ admin_id = 777124216876957696
 treasurer_id = 759317768364752966
 mod_id = 777124177269882902
 
+bot_command_channel_id = 804860036207738890
+
 def open_json(file_name):
     with open (file_name) as file:
         return json.load(file)
+
+def write_json(data, file_name):
+    with open (file_name, 'w') as file:
+        json.dump(data, file, indent = 4)
 
 @client.event
 async def on_ready():
@@ -30,6 +36,20 @@ async def on_ready():
 @client.command()
 @commands.has_any_role(founder_id, admin_id, treasurer_id, mod_id)
 async def update(ctx, force = None):
+    if ctx.channel.id != bot_command_channel_id:
+        await ctx.message.delete()
+        await ctx.send(f'Sorry please do not use this channel to begin an update. Please use {client.get_channel(bot_command_channel_id).mention}', delete_after = 5)
+        return
+    if force == 'prepare':
+        data = open_json("JSONdata/Bot_Info.json")
+        data.update({"update-status" : True})
+        write_json(data, "JSONdata/Bot_Info.json")
+        await ctx.send('Scheduling update for 1 day in advance. Broida will now be collect info for one day.')
+        await asyncio.sleep(5)
+        data = open_json("JSONdata/Bot_Info.json")
+        data.update({"update-status" : False})
+        write_json(data, "JSONdata/Bot_Info.json")
+        return 
     if not force:
         print()
         print()

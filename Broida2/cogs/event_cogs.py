@@ -79,7 +79,9 @@ class event_cogs(commands.Cog):
         utc = datetime.datetime.strptime(str(message.created_at)[:-7], "%Y-%m-%d %H:%M:%S")
         utc = utc.replace(tzinfo = from_zone)
         convert_zone = str(utc.astimezone(to_zone))
-        if variables.update_status is False:
+        data = await self.open_json("JSONdata/Bot_Info.json")
+        update_status = data["update-status"]
+        if update_status is False:
             return
         else:
             #append to delete_message_log

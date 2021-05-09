@@ -34,5 +34,3 @@ open_exam = []
 bot_list_id = [204255221017214977] 
 
 list_of_commands = ['.physics', '.fiziks', '.uptime', '.dadjoke', '.update']
-
-update_status = False

@@ -81,6 +81,7 @@ class help_commands(commands.Cog):
         embed.add_field(name = '.anonymous_finder', value = 'Someone anonymously posted bad things, find out who said it.')
         embed.add_field(name = '.clear_role', value = "It's that time of the quarter. Clear out the classes.")
         embed.add_field(name = '.winner', value = 'Have a prize you need to raffle off, lets see who won.')
+        embed.add_field(name = '.update', value = 'This command is for the devloper, prepare for something new... I hope.')
         embed.add_field(name = '.events', value = 'Checkout the list of events Broida has.')
         embed.add_field(name = '.add_event', value = 'Need to set a reminder to staff members, let Broida remind you.')
         embed.add_field(name = '.meeting_notes', value = 'Checkout the list of meeting notes Broida has.')
@@ -164,6 +165,20 @@ class help_commands(commands.Cog):
         embed.add_field(name = 'Usage', value = f'This command works anywhere in the sever.')
         embed.add_field(name = 'Additional Notes', value = 'Once this command is sent, Broida will try to mention everyone that sent a message in channel provided.\
              Some of the mentions might be numbers, this is normal.', inline = False)
+        embed.set_footer(text = self.footers[random.randint(0, len(self.footers) - 1)])
+        await ctx.send(embed = embed)
+    @help.command()
+    @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
+    async def update(self, ctx):
+        image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
+        embed = discord.Embed(title = 'Update Command', description = 'Format: .update force/prepare',
+                                colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
+        embed.set_thumbnail(url = image)
+        embed.add_field(name = 'Examples', value = '.update\n.update force\n.update prepare')
+        embed.add_field(name = 'Usage', value = f'This command only works in {self.bot.get_channel(variables.bot_command_channel_id).mention}.')
+        embed.add_field(name = 'Additional Notes', value = 'For a soft update use `.update` as it will restart each cog (each group of commands).\
+                        \nFor introducing a new cog (new set of commands) use `.update force`.\
+                        \nIf changes were made to main.py or `def __init__` use `.update prepare` to allow Broida to gather information for 1 day in advance.', inline = False)
         embed.set_footer(text = self.footers[random.randint(0, len(self.footers) - 1)])
         await ctx.send(embed = embed)
     @help.command()
