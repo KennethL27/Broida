@@ -25,7 +25,7 @@ class event_commands(commands.Cog):
                 event_date_list.append(json_event["date"])
                 event_name_list.append(json_event["event-name"])
                 event_mentions.append(json_event["mentions"])
-            bot_command_channel = self.bot.get_channel(variables.bot_command_channel_id)
+            staff_channel = self.bot.get_channel(variables.staff_channel_id)
             datetime_now = datetime.datetime.now()
             name_index = 0
             for date_string in event_date_list:
@@ -40,7 +40,7 @@ class event_commands(commands.Cog):
                     if 'Null' not in event_mentions[name_index]: 
                         mentions = event_mentions[name_index].replace('None', '').replace(',', '')
                         embed.add_field(name = 'Mentions', value = mentions)
-                    await bot_command_channel.send(embed = embed)
+                    await staff_channel.send(embed = embed)
                     data["event"].pop(name_index)
                     await self.write_json(data, 'JSONdata/Bot_Info.json')
                     break
@@ -58,7 +58,7 @@ class event_commands(commands.Cog):
             mention1 = 'Null'
         await ctx.reply('*You have 10 minutes to make any edits before the event is submitted*')
         original_message = ctx.message
-        release = ctx.message.created_at.now() + datetime.timedelta(0,6) # 600secs = 10 minutes
+        release = ctx.message.created_at.now() + datetime.timedelta(0,600) # 600secs = 10 minutes
         while datetime.datetime.now() < release:
             await asyncio.sleep(1)
             edit_message_time = original_message.edited_at
