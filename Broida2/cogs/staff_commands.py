@@ -53,6 +53,21 @@ class staff_commands(commands.Cog):
             except:
                 await channel.send(content = announcement)
     
+    @announcement.error
+    async def error_announcement(self, ctx, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if ctx.channel.id != variables.bot_command_channel_id:
+                await ctx.message.delete()
+                await ctx.send(f'Sorry please do not use this channel for creating announcement. Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
+            else:
+                await ctx.send("Please enter all arguments. To get more information about this command use `.help events`")
+        elif isinstance(error, commands.CommandInvokeError):
+            await ctx.send(f"Sorry I couldn't start making that announcement. Please use the correct format for announcements. Use `.help announcement` to get more information.\n{error}")
+        elif isinstance(error, commands.UnexpectedQuoteError) or isinstance(error, commands.ExpectedClosingQuoteError):
+            await ctx.send(f'Looks like there was a quote error.\n{error}')
+
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id)
     async def clear_role(self, ctx, role : discord.Role):
@@ -74,6 +89,19 @@ class staff_commands(commands.Cog):
         if role != gaucho_role or role != graduate_role or role != super_senior_role or role != senior_role or role != junior_role or role != sophomore_role or role != freshman_role or role != freshman_role:
             for i in role_members:
                 await i.remove_roles(role)
+
+    @clear_role.error
+    async def error_clear_role(self, ctx, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if ctx.channel.id != variables.bot_command_channel_id:
+                await ctx.message.delete()
+                await ctx.send(f'Sorry please do not use this channel for clearing roles. Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
+            else:
+                await ctx.send("Please enter all arguments. To get more information about this command use `.help clear_role`")
+        elif isinstance(error, commands.RoleNotFound):
+            await ctx.send(f'Sorry I could not find that role. Please mention the role. (ie. {self.bot.get_guild(variables.guild_id).get_role(variables.bot_role_id).mention})')
 
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
@@ -138,6 +166,20 @@ class staff_commands(commands.Cog):
         data["avoid-gaucho-member"].remove(member.id)
         await self.write_json(data, "JSONdata/Bot_Info.json")
 
+    @ban.error
+    async def error_ban(self, ctx, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if ctx.channel.id != variables.bot_command_channel_id:
+                await ctx.message.delete()
+                await ctx.send(f'Sorry please do not use this channel for that! Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
+            else:
+                await ctx.send("Please enter all arguments. To get more information about this command use `.help ban`")
+        elif isinstance(error, commands.MemberNotFound):
+            await ctx.send(f'Sorry I could not find that member. Please use the correct format for mentioning a member. (ie. {self.bot.user.mention})')
+
+
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def add_meeting(self, ctx, *, notes):
@@ -160,6 +202,17 @@ class staff_commands(commands.Cog):
         data["meeting-notes"].append({"date" : str(ctx.message.created_at.now().date()), f"note-entry" : note_message})
         await self.write_json(data, "JSONdata/Bot_Info.json")
 
+    @add_meeting.error
+    async def error_add_meeting(self, ctx, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if ctx.channel.id != variables.staff_channel_id:
+                await ctx.message.delete()
+                await ctx.send(f'Sorry please do not use this channel for creating meeting notes. Please use {self.bot.get_channel(variables.staff_channel_id).mention}', delete_after = 5)
+            else:
+                await ctx.send("Please enter all arguments. To get more information about this command use `.help meeting_notes`")
+
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def meeting_notes(self, ctx, date = None):
@@ -176,11 +229,15 @@ class staff_commands(commands.Cog):
                 embed.add_field(name = data_date["date"], value = f'{data_date["note-entry"][:20]}...')
             await ctx.send(embed = embed)
         else:
+            check = False
             for data_date in data["meeting-notes"]:
                 embed = discord.Embed(colour = 0x008000)
                 if data_date["date"].replace('-', '') == date.replace('/', '').replace('-',''):
                     embed.add_field(name = data_date["date"], value = data_date["note-entry"])
                     await ctx.send(embed = embed)
+                    check = True
+            if check == False:
+                await ctx.send("Sorry I couldn't find any notes for that date. To view an entire meeting note please use `.meeting_notes 'copy and paste a valid date'`")
 
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
@@ -213,6 +270,15 @@ class staff_commands(commands.Cog):
         embed = discord.Embed(title = 'Raffle: WINNER', description = winner, colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
         embed.set_image(url = image)
         await ctx.send(embed = embed)
+
+    @winner.error
+    async def error_winner(self, ctx, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Please enter all arguments. To get more information about this command use `.help meeting_notes`")
+        elif isinstance(error, commands.ChannelNotFound):
+            await ctx.send(f'Sorry I could not find that channel. Please mention the channel. (ie. {self.bot.get_channel(variables.bot_command_channel_id).mention})')
 
 def setup(bot):
     bot.add_cog(staff_commands(bot))

@@ -58,8 +58,10 @@ async def update(ctx, force = None):
         cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
         for cog in cog_fields:
             print(f'Reloading {cog}\n')
+            await ctx.send(f'Reloading {cog}\n')
             client.reload_extension(f'cogs.{cog}')
             print(f'Loaded {cog}\n')
+            await ctx.send(f'Loaded {cog}\n')
             print('_______________________________________')
     # a force update will allow new cogs to be introduced without restarting main.py
     else:
@@ -70,6 +72,7 @@ async def update(ctx, force = None):
         cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
         for cog in cog_fields:
             print(f'Reloading {cog}\n')
+            print(f'Attempting to Reload {cog}\n')
             try:
                 client.unload_extension(f'cogs.{cog}')
                 client.load_extension(f'cogs.{cog}')

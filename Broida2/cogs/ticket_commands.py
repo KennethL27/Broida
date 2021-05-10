@@ -270,8 +270,6 @@ class ticket_commands(commands.Cog):
         embed.add_field(name = 'RESULT', value = 'No action was created.')
         await channel.send(embed = embed)
 
-#######################################################################################################################################################
-
     @ticket.error
     async def ticket_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
