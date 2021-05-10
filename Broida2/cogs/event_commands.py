@@ -50,6 +50,10 @@ class event_commands(commands.Cog):
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def add_event(self, ctx, event_name : str, event_time : str, mention1 = None, mention2 = None, mention3 = None, mention4 = None, mention5 = None):
+        try:
+            datetime.datetime.strptime(event_time, '%m-%d-%Y %I:%M%p')
+        except:
+            datetime.datetime.strptime(event_time, '%m/%d/%Y %I:%M%p')
         if ctx.channel.id != variables.staff_channel_id:
             await ctx.message.delete()
             await ctx.send(f'Sorry please do not use this channel for creating events. Please use {self.bot.get_channel(variables.staff_channel_id).mention}', delete_after = 5)
@@ -77,9 +81,28 @@ class event_commands(commands.Cog):
                     mention5 = list_of_mentions[4]
                 except:
                     pass
+            try:
+                datetime.datetime.strptime(event_time, '%m-%d-%Y %I:%M%p')
+            except:
+                datetime.datetime.strptime(event_time, '%m/%d/%Y %I:%M%p')
         data = await self.open_json('JSONdata/Bot_Info.json')
         data["event"].append({"date" : event_time, "event-name": event_name, "mentions": f'{mention1}, {mention2}, {mention3}, {mention4}, {mention5}'})
         await self.write_json(data, 'JSONdata/Bot_Info.json')
+
+    @add_event.error
+    async def error_add_event(self, ctx, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if ctx.channel.id != variables.bot_command_channel_id:
+                await ctx.message.delete()
+                await ctx.send(f'Sorry please do not use this channel for creating event reminders. Please use {self.bot.get_channel(variables.staff_channel_id).mention}', delete_after = 5)
+            else:
+                await ctx.send("Please enter all arguments. To get more information about this command use `.help events`")
+        elif isinstance(error, commands.CommandInvokeError):
+            await ctx.send(f"Sorry I couldn't add that event. Please use the correct format for events. Use `.help events` to get more information.\n{error}")
+        elif isinstance(error, commands.UnexpectedQuoteError):
+            await ctx.send(f'Looks like there was a quote error.\n{error}')
 
     @commands.command()
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)

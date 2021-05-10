@@ -152,6 +152,8 @@ class exam_commands(commands.Cog):
             await ctx.send(f'Sorry I could not find that role. Please mention the role. (ie. {self.bot.get_guild(variables.guild_id).get_role(variables.bot_role_id).mention})')
         elif isinstance(error, commands.CommandInvokeError):
             await ctx.send(f"Sorry I couldn't add that exam time. Please use the correct format for exam. Use `.help exam` to get more information.\n{error}")
+        elif isinstance(error, commands.UnexpectedQuoteError):
+            await ctx.send(f'Looks like there was a quote error.\n{error}')
         else:
             raise error
 
