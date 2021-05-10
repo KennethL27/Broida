@@ -263,6 +263,20 @@ class help_commands(commands.Cog):
         embed.set_footer(text = self.footers[random.randint(0, len(self.footers) - 1)])
         await ctx.send(embed = embed)
 
+    @staff.error
+    @announcement.error
+    @exam.error
+    @ban.error
+    @anonymous_finder.error
+    @clear_role.error
+    @winner.error
+    @update.error
+    @events.error
+    @meeting_notes.error
+    async def error_help(self, ctx, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+    
 def setup(bot):
     bot.add_cog(help_commands(bot))
     print("Help Commands Online\n")
