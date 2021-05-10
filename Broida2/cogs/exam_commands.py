@@ -137,7 +137,7 @@ class exam_commands(commands.Cog):
                 index = index + 1
 
     @exam.error
-    async def error(self, ctx, error):
+    async def error_exam(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             if ctx.channel.id != variables.bot_command_channel_id:
                 await ctx.message.delete()
@@ -170,7 +170,7 @@ class exam_commands(commands.Cog):
                 exam_channel = self.bot.get_channel(exam["course-channel"])
                 embed.add_field(name = exam_channel.name, value = f'From: {exam["start-date"]} To: {exam["end-date"]}')
             await ctx.send(embed = embed)
-            
+
 def setup(bot):
     bot.add_cog(exam_commands(bot))
     print("Exam Commands Online\n")

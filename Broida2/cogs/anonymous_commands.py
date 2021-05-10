@@ -87,6 +87,12 @@ class anonymous_commands(commands.Cog):
             self.generated_user.clear()
             self.delete_counter = 0
 
+    @anonymous.error
+    async def error_anonymous(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.message.delete()
+            await ctx.send("Sorry I can't send that message. For more information use `.help anonymous`")
+
     @commands.command(aliases=['afind'])
     @commands.has_any_role(variables.founder_id, variables.admin_id, variables.treasurer_id, variables.mod_id)
     async def anonymous_finder(self, ctx, message_id):
@@ -111,6 +117,17 @@ class anonymous_commands(commands.Cog):
                     status = True
             if status == False:
                 await ctx.send('There is no data on the message you selected.')
+
+    @anonymous_finder.error
+    async def error_anonymous_finder(self, ctx, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if ctx.channel.id != variables.bot_command_channel_id:
+                await ctx.message.delete()
+                await ctx.send("Please do not use this command here!", delete_after = 5)
+                return
+            await ctx.send("Sorry I couldn't execute that. For more information use `.help anonymous_finder`")
 
 def setup(bot):
     bot.add_cog(anonymous_commands(bot))
