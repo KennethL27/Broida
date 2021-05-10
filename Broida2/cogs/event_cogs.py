@@ -26,7 +26,7 @@ class event_cogs(commands.Cog):
         status = False
 
         try:
-            if message.content.startswith('.a ') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous') or message.content.startswith('.pexam') or message.content.startswith('.meeting_notes'):
+            if message.content.startswith('.a ') or  message.content.startswith('.anonymity') or message.content.startswith('.anonymous') or message.content.startswith('.exam') or message.content.startswith('.meeting_notes'):
                 return
 
             from_zone = tz.tzutc()
@@ -106,7 +106,10 @@ class event_cogs(commands.Cog):
                 If you are a **prospective student** and wish to take a small view at UCSB Physics then please fill out this [form](https://forms.gle/bd77bphN1qbVWw7x8)')
         embed.add_field(name = 'New to Discord?', value = f"If you are new to Discord and want to find out more about discord's functionalty please head over to {manual_channel.mention}.")
         embed.set_thumbnail(url = image)
-        await user.send(embed = embed)
+        try:
+            await user.send(embed = embed)
+        except:
+            await self.bot.get_channel(variables.bot_command_channel_id).send(f"Could not send a welcome DM to {user.mention}")
 
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
@@ -123,7 +126,10 @@ class event_cogs(commands.Cog):
                 if you have any questions feel free to reach out to any of our moderators. \n\nIf you havent already please read and follow our {rules_channel.mention} while being apart of this community.')
             embed.add_field(name = 'New to Discord?', value = f"If you are new to Discord and want to find out more about discord's functionalty please head over to {manual_channel.mention}.")
             embed.set_thumbnail(url = image)
-            await before.send(embed = embed)
+            try:
+                await before.send(embed = embed)
+            except:
+                await self.bot.get_channel(variables.bot_command_channel_id).send(f"Could not send a gaucho welcome DM to {before.mention}")
 
     @commands.Cog.listener()
     async def on_member_remove(self, user):
