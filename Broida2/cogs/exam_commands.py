@@ -81,10 +81,6 @@ class exam_commands(commands.Cog):
             await ctx.send(f'Sorry please do not use this channel for creating exam times. Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
             return
 
-        data = await self.open_json('JSONdata/Bot_Info.json')
-        data["exam"].append({"start-date" : start_date, "end-date": end_date, "course-channel": channel.id, "course-role" : role.id})
-        await self.write_json(data, 'JSONdata/Bot_Info.json')
-
         try:
             start_datetime = datetime.datetime.strptime(start_date, '%m-%d-%Y %I:%M%p')
         except:
@@ -94,6 +90,10 @@ class exam_commands(commands.Cog):
             end_datetime = datetime.datetime.strptime(end_date, '%m-%d-%Y %I:%M%p')
         except:
             end_datetime = datetime.datetime.strptime(end_date, '%m/%d/%Y %I:%M%p')
+
+        data = await self.open_json('JSONdata/Bot_Info.json')
+        data["exam"].append({"start-date" : start_date, "end-date": end_date, "course-channel": channel.id, "course-role" : role.id})
+        await self.write_json(data, 'JSONdata/Bot_Info.json')
 
         open_exam_text = f'{channel.mention} has an exam from {start_date}  to {end_date}'
         variables.open_exam.append(open_exam_text)
@@ -136,6 +136,25 @@ class exam_commands(commands.Cog):
             else:
                 index = index + 1
 
+    @exam.error
+    async def error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            if ctx.channel.id != variables.bot_command_channel_id:
+                await ctx.message.delete()
+                await ctx.send(f'Sorry please do not use this channel for creating exam times. Please use {self.bot.get_channel(variables.bot_command_channel_id).mention}', delete_after = 5)
+            else:
+                await ctx.send("Please enter all arguments. To get more information about this command use `.help exam`")
+        elif isinstance(error, commands.MissingAnyRole):
+            await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
+        elif isinstance(error, commands.ChannelNotFound):
+            await ctx.send(f'Sorry I could not find that channel. Please mention the channel. (ie. {self.bot.get_channel(variables.bot_command_channel_id).mention})')
+        elif isinstance(error, commands.RoleNotFound):
+            await ctx.send(f'Sorry I could not find that role. Please mention the role. (ie. {self.bot.get_guild(variables.guild_id).get_role(variables.bot_role_id).mention})')
+        elif isinstance(error, commands.CommandInvokeError):
+            await ctx.send(f"Sorry I couldn't add that exam time. Please use the correct format for exam. Use `.help exam` to get more information.\n{error}")
+        else:
+            raise error
+
     @commands.command()
     async def open_exams(self, ctx):
         embed = discord.Embed(title = 'Exam Dates', description = '',
@@ -151,6 +170,7 @@ class exam_commands(commands.Cog):
                 exam_channel = self.bot.get_channel(exam["course-channel"])
                 embed.add_field(name = exam_channel.name, value = f'From: {exam["start-date"]} To: {exam["end-date"]}')
             await ctx.send(embed = embed)
+            
 def setup(bot):
     bot.add_cog(exam_commands(bot))
     print("Exam Commands Online\n")

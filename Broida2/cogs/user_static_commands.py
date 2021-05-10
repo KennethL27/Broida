@@ -70,6 +70,13 @@ class user_static_commands(commands.Cog):
         data = await self.open_json('JSONdata/Bot_string_list.json')
         dad_jokes = data["dad-jokes"]
         await ctx.send(dad_jokes[random.randint(0, len(dad_jokes))])
+    
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            await ctx.send("Sorry about that, I don't seem to know that command. To see a full list of commands use `.help`")
+        else:
+            raise error
 
 def setup(bot):
     bot.add_cog(user_static_commands(bot))

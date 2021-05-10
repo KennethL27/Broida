@@ -270,6 +270,17 @@ class ticket_commands(commands.Cog):
         embed.add_field(name = 'RESULT', value = 'No action was created.')
         await channel.send(embed = embed)
 
+#######################################################################################################################################################
+
+    @ticket.error
+    async def ticket_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('Error: I could not find that member. When dming the bot use this format "username#number(ie. PhysicsLegends#6877)", otherwise mention the user by the @ feature.')
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send('Error: Please provide all arguments: ie. ".ticket username#number(ie. PhysicsLegends#6877) `insert your argument here`"')
+        else:
+            raise error
+
 def setup(bot):
     bot.add_cog(ticket_commands(bot))
     print("Ticket Commands Online\n")

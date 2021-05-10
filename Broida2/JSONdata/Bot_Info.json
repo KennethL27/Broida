@@ -41,12 +41,6 @@
             "end-date": "5/10/2021 10:43pm",
             "course-channel": 777012572423585803,
             "course-role": 777124261902155776
-        },
-        {
-            "start-date": "5/9/2021 10:41pm",
-            "end-date": "5/9/2021 10:43pm",
-            "course-channel": 777012512377012234,
-            "course-role": 777124177269882902
         }
     ],
     "event": [
@@ -89,11 +83,6 @@
             "date": "6-3-2021 8:30pm",
             "event-name": "Study Grind",
             "mentions": "Null"
-        },
-        {
-            "date": "5/9/2021 9:26pm",
-            "event-name": "New Event Test",
-            "mentions": "<@!411631919370076170>, <@&759317768364752966>, None, None, None"
         }
     ],
     "avoid-gaucho-member": [],
