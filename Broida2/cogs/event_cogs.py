@@ -98,8 +98,8 @@ class event_cogs(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, user):
         image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
-        rules_channel = self.bot.get_channel(775492454338002994)
-        manual_channel = self.bot.get_channel(760907945646751804)
+        rules_channel = self.bot.get_channel(variables.pre_rules_channel_id)
+        manual_channel = self.bot.get_channel(variables.pre_manual_channel_id)
         embed = discord.Embed(colour = 0X003560)
         embed.add_field(name = 'Welcome!', value = f'Thank you {user.mention} for joining the UCSB Physics Server! Please read and follow our {rules_channel.mention} while being apart of this community.\n\n\
             If you are a **current UCSB student** or apart of the **UCSB Faculty** please fill out this [form](https://forms.gle/jAsx4TKBeERPQT6K9) to gain access \n\n\
@@ -120,8 +120,8 @@ class event_cogs(commands.Cog):
         if gaucho_role not in before.roles and gaucho_role in after.roles and before.id not in avoid_gaucho_member: # going to need to have avoid_gaucho_member info in bot_info.json
             image = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif'
             embed = discord.Embed(colour = 0X003560)
-            rules_channel = self.bot.get_channel(775492454338002994)
-            manual_channel = self.bot.get_channel(760907945646751804)
+            rules_channel = self.bot.get_channel(variables.rules_channel_id)
+            manual_channel = self.bot.get_channel(variables.manual_channel_id)
             embed.add_field(name = 'Thank you!', value = f'Thank you {before.mention} for filling out our verification form! You should now have access to our Server, \
                 if you have any questions feel free to reach out to any of our moderators. \n\nIf you havent already please read and follow our {rules_channel.mention} while being apart of this community.')
             embed.add_field(name = 'New to Discord?', value = f"If you are new to Discord and want to find out more about discord's functionalty please head over to {manual_channel.mention}.")

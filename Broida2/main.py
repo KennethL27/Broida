@@ -72,7 +72,7 @@ async def update(ctx, force = None):
         cog_fields = open_json("JSONdata/Bot_Info.json")["cogs"]
         for cog in cog_fields:
             print(f'Reloading {cog}\n')
-            print(f'Attempting to Reload {cog}\n')
+            await ctx.send(f'Attempting to Reload {cog}\n')
             try:
                 client.unload_extension(f'cogs.{cog}')
                 client.load_extension(f'cogs.{cog}')
@@ -80,6 +80,7 @@ async def update(ctx, force = None):
                 client.load_extension(f'cogs.{cog}')
             print(f'Loaded {cog}\n')
             print('_______________________________________')
+            await ctx.send(f'Loaded {cog}\n')
 
 @client.command()
 async def uptime(ctx):

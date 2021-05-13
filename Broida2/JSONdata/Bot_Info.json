@@ -35,20 +35,8 @@
             "note-entry": "In this session we have created new positions\n* we have also made a post reaching out to new students that recently got admitted"
         }
     ],
-    "exam": [
-        {
-            "start-date": "5/10/2021 10:41pm",
-            "end-date": "5/10/2021 10:43pm",
-            "course-channel": 777012572423585803,
-            "course-role": 777124261902155776
-        }
-    ],
+    "exam": [],
     "event": [
-        {
-            "date": "5-11-2021 8:30pm",
-            "event-name": "Study Grind",
-            "mentions": "Null"
-        },
         {
             "date": "5-13-2021 8:30pm",
             "event-name": "Study Grind",

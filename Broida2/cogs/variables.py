@@ -30,6 +30,10 @@ rant_id = 771845526903586847
 ban_id = 794092839280967691 
 welcome_id = 775492454338002994 
 staff_channel_id = 804860036207738890
+rules_channel_id = 775492454338002994
+manual_channel_id = 760907945646751804
+pre_rules_channel_id = 775492454338002994
+pre_manual_channel_id = 760907945646751804
 
 open_exam = []
 
