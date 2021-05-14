@@ -52,24 +52,24 @@ async def update(ctx, force = None):
         return 
     if not force:
         print('\n\n\n______________________________________________________')
-        cogs = client.open_json("JSONdata/Bot_Info.json")["cogs"]
-        value = str(cogs).replace("']",':🔄\n').replace('[','').replace(']','').replace(',','').replace(' ',': 🔄\n').replace("'", '')
+        cogs = open_json("JSONdata/Bot_Info.json")["cogs"]
+        value = str(cogs).replace("']",':\U0001F504\n').replace('[','').replace(']','').replace(',','').replace(' ',': \U0001F504\n').replace("'", '')
         embed = discord.Embed()
         embed.add_field(name = "Update Status", value = value)
         update_message = await ctx.send(embed = embed)
         for cog in cogs:
             print(f'Reloading {cog}\n')
             try:
-                client.bot.reload_extension(f'cogs.{cog}')
+                client.reload_extension(f'cogs.{cog}')
                 embed = discord.Embed()
-                value = value.replace('🔄', '☑️', 1)
+                value = value.replace('\U0001F504', '\U00002705', 1)
                 embed.add_field(name = "Update Status", value = value)
                 await update_message.edit(embed = embed)
                 print(f'Loaded {cog}\n')
                 print('_______________________________________')
             except:
                 embed = discord.Embed()
-                value = value.replace('🔄', '❌', 1)
+                value = value.replace('\U0001F504', '\U0000274C', 1)
                 embed.add_field(name = "Update Status", value = value)
                 await update_message.edit(embed = embed)
                 print(f"Couldn't load {cog}\n")
@@ -77,8 +77,8 @@ async def update(ctx, force = None):
     # a force update will allow new cogs to be introduced without restarting main.py
     else:
         print('\n\n\n______________________________________________________')
-        cogs = client.open_json("JSONdata/Bot_Info.json")["cogs"]
-        value = str(cogs).replace("']",':🔄\n').replace('[','').replace(']','').replace(',','').replace(' ',': 🔄\n').replace("'", '')
+        cogs = open_json("JSONdata/Bot_Info.json")["cogs"]
+        value = str(cogs).replace("']",':\U0001F504\n').replace('[','').replace(']','').replace(',','').replace(' ',': \U0001F504\n').replace("'", '')
         embed = discord.Embed()
         embed.add_field(name = "Update Status", value = value)
         update_message = await ctx.send(embed = embed)
@@ -90,7 +90,7 @@ async def update(ctx, force = None):
             except:
                 client.load_extension(f'cogs.{cog}')
             embed = discord.Embed()
-            value = value.replace('🔄', '☑️', 1)
+            value = value.replace('\U0001F504', '\U00002705', 1)
             embed.add_field(name = "Update Status", value = value)
             await update_message.edit(embed = embed)
             print(f'Loaded {cog}\n')
