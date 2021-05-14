@@ -10,12 +10,7 @@ class help_commands(commands.Cog):
                     'Powered by perpetual motion', 'Powered by the bike lane', 'Powered by flat-eathers', 'Powered by ...', 'Loading...', 'Powered by Storke Tower', 'Powered by love']
     
     async def staff_check(self, ctx):
-        if ctx.channel.id != variables.bot_command_channel_id:
-            await ctx.message.delete()
-            await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
-                            delete_after = 5)
-            return True
-        elif ctx.channel.id != variables.staff_channel_id:
+        if ctx.channel.id not in [variables.bot_command_channel_id, variables.staff_channel_id]:
             await ctx.message.delete()
             await ctx.send(f'Sorry please do not use this channel for that command. Please use {self.bot.get_channel(variables.staff_channel_id).mention} or {self.bot.get_channel(variables.bot_command_channel_id).mention}',
                             delete_after = 5)
