@@ -15,9 +15,9 @@ class user_static_commands(commands.Cog):
 
     @commands.command(aliases = ['classes', 'class', 'schedule'])
     async def courses(self, ctx):
-        embed = discord.Embed(title = 'Proposed Courses for 20-21', url = 'https://www.physics.ucsb.edu/resources/teachingassignments', colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
+        embed = discord.Embed(title = 'Proposed Courses for 21-22', url = 'https://www.physics.ucsb.edu/resources/teachingassignments', colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc))
         embed.set_thumbnail(url = 'https://cdn.discordapp.com/attachments/700224899721199626/782224701229367316/UCSB_Discord_GIF9.gif')
-        embed.set_image(url = 'https://cdn.discordapp.com/attachments/772690834151571506/782475543404347422/Screenshot_20201128-231814_Drive.jpg')
+        embed.set_image(url = 'https://cdn.discordapp.com/attachments/700224899721199626/843937605154635816/unknown.png')
         await ctx.send(embed = embed) 
 
     @commands.command()
